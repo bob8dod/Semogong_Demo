@@ -1,9 +1,9 @@
 package Talk_with.semogong.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +21,7 @@ public class Member {
     private String desiredJob;
 
     @Enumerated(EnumType.STRING)
-    private StudyState studyState;
+    private StudyState state;
 
     @ElementCollection
     private List<String> links = new ArrayList<>();
@@ -33,7 +33,7 @@ public class Member {
 
 
     //==생성 메서드==//
-    public static Member createMember(String name, String nickname, String desiredJob, String image, String introduce,StudyState state, String... links){
+    public static Member createMember(String name, String nickname, String desiredJob, String image, String introduce, String... links){
          Member member = new Member();
          member.name = name;
          member.nickname = nickname;
@@ -41,9 +41,11 @@ public class Member {
          member.image = image;
          member.introduce = introduce;
          if(links != null) member.links.addAll(Arrays.asList(links));
-         member.studyState = state;
+         member.state = StudyState.END;
          return member;
     }
 
-
+    public void changeState(StudyState state){
+        this.state = state;
+    }
 }

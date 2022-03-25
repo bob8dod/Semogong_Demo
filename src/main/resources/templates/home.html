@@ -45,16 +45,18 @@
                     <!-- Featured blog post-->
                     <!-- Nested row for non-featured blog posts-->
                     <div class="row" >
-                        <div class="col-lg-6" th:each="post:${posts}">
+                        <div class="col-lg-6" th:if="${posts != null}" th:each="post:${posts}">
                             <!-- Blog post-->
                             <div class="card mb-4" >
                                 <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
                                 <div class="card-body">
                                     <div class="small text-muted" >January 1, 2021</div>
                                     <h2 class="card-title h4" th:text="${post.title}">Post Title</h2>
-                                    <p class="card-text" th:text="${post.member.name}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                    <p class="card-text" th:text="${post.member.desiredJob}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                    <p class="card-text" th:text="${post.introduce}">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
+                                    <p class="card-text" th:text="${post.member.name}"></p>
+                                    <p class="card-text" th:text="${post.member.desiredJob}"></p>
+                                    <p class="card-text" th:text="${post.member.state}">공부 중</p>
+                                    <p class="card-text" th:each="time:${post.times}" th:text="${time}">공부 중</p>
+                                    <p class="card-text" th:text="${post.introduce}"></p>
                                     <a class="btn btn-primary" href="#!">Read more →</a>
                                 </div>
                             </div>
@@ -80,8 +82,10 @@
                     <div class="card mb-4">
                         <div class="card-header">Profile</div>
                         <div class="card-body" th:object="${member}">
-                            <div class="input-group" th:text="|*{name} : *{desiredJob}|"> </div>
-                            <a class="btn btn-primary" href="/posts/new"> Posting </a>
+                            <div class="input-group" th:text="|*{name} : *{desiredJob} , *{state}|"> </div>
+                            <a class="btn btn-primary" href="/studying"> 공부 중 </a>
+                            <a class="btn btn-primary" style="background-color: #ffc720" href="/breaking"> 휴식 중 </a>
+                            <a class="btn btn-primary" style="background-color: lightgray" href="/end"> 완료 </a>
                         </div>
                     </div>
                     <!-- Categories widget-->

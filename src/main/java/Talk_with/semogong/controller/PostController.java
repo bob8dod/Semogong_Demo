@@ -1,7 +1,8 @@
 package Talk_with.semogong.controller;
 
 import Talk_with.semogong.domain.Member;
-import Talk_with.semogong.domain.form.MemberForm;
+import Talk_with.semogong.domain.Post;
+import Talk_with.semogong.domain.StudyState;
 import Talk_with.semogong.domain.form.PostForm;
 import Talk_with.semogong.service.MemberService;
 import Talk_with.semogong.service.PostService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @Controller
 @Slf4j
@@ -27,7 +29,9 @@ public class PostController {
     @GetMapping("/posts/new")
     public String to_create(Model model){
         log.info("joining");
-        model.addAttribute("postForm", new PostForm());
+        PostForm postForm = new PostForm();
+        postForm.setTime(LocalDateTime.now());
+        model.addAttribute("postForm", postForm);
         model.addAttribute("members", memberService.findAll());
         return "post/createPostForm";
     }

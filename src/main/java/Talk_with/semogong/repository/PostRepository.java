@@ -26,4 +26,8 @@ public class PostRepository {
         return em.createQuery("select p from Post p", Post.class).getResultList();
     }
 
+    public List<Post> findByMember(Long memberId) {
+        return em.createQuery("select p from Post p join p.member m where m.id = :id order by p.createTime DESC", Post.class)
+                .setParameter("id", memberId).getResultList();
+    }
 }

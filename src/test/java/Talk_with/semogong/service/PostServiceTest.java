@@ -23,7 +23,7 @@ class PostServiceTest {
     @Test
     public void 게시글저장() throws Exception{
         //given (주어진 것들을 통해)
-        Member m1 = Member.createMember(new String("박승일"), "해돌해돌","백엔드 엔지니어", "aws/11234.img","안녕하세요, 17학번 썩은물입니다.", StudyState.공부중,"bob8dod.tistory.com","github.com/bob8dod");
+        Member m1 = Member.createMember(new String("박승일"), "해돌해돌","백엔드 엔지니어", "aws/11234.img","안녕하세요, 17학번 썩은물입니다.", "bob8dod.tistory.com","github.com/bob8dod");
         memberService.save(m1);
 
         String title = "세모공 데모 테스트";
@@ -38,6 +38,31 @@ class PostServiceTest {
         //then (이런 결과를 확인할 것)
         Post saved_p = postService.findOne(p1.getId());
         assertEquals(p1,saved_p);
+
+    }
+
+    @Test
+    public void 상태클릭() throws Exception{
+        //given (주어진 것들을 통해)
+        Member m1 = Member.createMember(new String("이해성"), "해돌해돌","백엔드 엔지니어", "aws/11234.img","안녕하세요, 17학번 썩은물입니다.", "bob8dod.tistory.com","github.com/bob8dod");
+        memberService.save(m1);
+
+        String title = "세모공 데모 테스트";
+        String introduce = "당신은 행복합니까?";
+        String text = "오늘의 목표\r\n - 세모공 개발 \r\n - 영어 회화 \r\n" ;
+        LocalDateTime time = LocalDateTime.now();
+
+        Post p1 = Post.createPost(m1,title,introduce,text,time);
+        postService.save(p1);
+
+        //when (이런 기능을 동작했을 때)
+        postService.addTime(m1.getId(), LocalDateTime.now());
+
+        //then (이런 결과를 확인할 것)
+        for (LocalDateTime t : postService.findOne(p1.getId()).getTimes()){
+            System.out.print("t = " + t + "   ");
+        }
+        System.out.println();
 
     }
 

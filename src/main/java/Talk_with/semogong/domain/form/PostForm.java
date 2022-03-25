@@ -17,5 +17,6 @@ public class PostForm {
     private String title;
     private String introduce;
     private String text;
+    private LocalDateTime time;
 
 }

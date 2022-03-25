@@ -26,8 +26,10 @@ public class Post {
     @ElementCollection
     private List<LocalDateTime> times = new ArrayList<>();
 
+    private LocalDateTime createTime;
+
     //==연관관계 메서드==//
-    public void setMember(Member member){
+    private void setMember(Member member){
         this.member = member;
         member.getPosts().add(this);
     }
@@ -40,7 +42,11 @@ public class Post {
         post.introduce = introduce;
         post.text = text;
         post.times.add(time);
-
+        post.createTime = time;
         return post;
+    }
+
+    public void addTime(LocalDateTime time) {
+        this.times.add(time);
     }
 }
