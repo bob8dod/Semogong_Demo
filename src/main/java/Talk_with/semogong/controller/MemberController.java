@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Null;
 
@@ -22,17 +23,20 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/members/join")
-    public String to_join(Model model){
-        log.info("joining");
+    // 회원가입 폼
+    @GetMapping("/members/signup")
+    public String signUpForm(Model model) {
+        log.info("signup");
         model.addAttribute("memberForm", new MemberForm());
         return "member/createMemberForm";
     }
 
-    @PostMapping("/members/join")
-    public String join(@Valid MemberForm memberForm, BindingResult result) {
+    // 회원가입 진행
+    @PostMapping("/members/signup")
+    public String signUp(@Valid MemberForm memberForm, BindingResult result) {
         if (result.hasErrors()) { log.info("found Null, re-joining"); return "member/createMemberForm"; }
-        Member member = Member.createMember(memberForm.getName(),memberForm.getNickname(),memberForm.getDesiredJob(), null,memberForm.getIntroduce(),null ,null);
+        Member member = Member.createMember(memberForm.getLoginId(), memberForm.getPassword(), memberForm.getName(),memberForm.getNickname(),memberForm.getDesiredJob(), null,memberForm.getIntroduce(),null ,null);
+        member.setRole("USER");
         memberService.save(member);
         return "redirect:/";
     }
@@ -42,5 +46,11 @@ public class MemberController {
         model.addAttribute("members", memberService.findAll());
         log.info("Searching Members");
         return "member/memberList";
+    }
+
+    @GetMapping("/members/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/"; //주소 요청으로 변경
     }
 }

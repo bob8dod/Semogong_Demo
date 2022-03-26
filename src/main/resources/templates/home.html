@@ -80,13 +80,37 @@
                 <div class="col-lg-4">
                     <!-- Search widget-->
                     <div class="card mb-4">
-                        <div class="card-header">Profile</div>
-                        <div class="card-body" th:object="${member}">
+                        <div class="card-header" th:if="${check}">Profile</div>
+                        <div class="card-body" th:if="${check}" th:object="${member}">
                             <div class="input-group" th:text="|*{name} : *{desiredJob} , *{state}|"> </div>
                             <a class="btn btn-primary" href="/studying"> 공부 중 </a>
                             <a class="btn btn-primary" style="background-color: #ffc720" href="/breaking"> 휴식 중 </a>
                             <a class="btn btn-primary" style="background-color: lightgray" href="/end"> 완료 </a>
                         </div>
+                        <div th:if="${check}"> <a>정보 수정</a> <a href="/members/logout">로그 아웃</a> </div>
+                        <div class="card-header" th:if="${!check}">Log In</div>
+                        <div class="card-body" th:if="${!check}">
+                            <form action="/member/login" method="post">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Id">
+                                    <label for="username">Id</label>
+                                </div>
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                    <label for="password">Password</label>
+                                </div>
+
+                                <div class="checkbox mb-3">
+                                    <label>
+                                        <input type="checkbox" value="remember-me"> Remember me
+                                    </label>
+                                </div>
+                                <button class="w-100 btn btn-lg btn-primary" type="submit">로그인</button>
+
+                            </form>
+                            <a style="margin-top: 5px" class="w-100 btn btn-lg btn-primary" href="/members/signup">회원 가입</a>
+                        </div>
+
                     </div>
                     <!-- Categories widget-->
                     <div class="card mb-4">

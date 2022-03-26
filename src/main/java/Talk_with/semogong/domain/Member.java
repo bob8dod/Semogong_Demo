@@ -3,7 +3,6 @@ package Talk_with.semogong.domain;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +14,12 @@ public class Member {
     @Id @GeneratedValue
     @Column(name = "member_id")
     private long id;
+
+    // authorization
+    private String loginId;
+    private String password;
+    private String role;     //권한
+
 
     private String name;
     private String nickname;
@@ -33,8 +38,10 @@ public class Member {
 
 
     //==생성 메서드==//
-    public static Member createMember(String name, String nickname, String desiredJob, String image, String introduce, String... links){
+    public static Member createMember(String loginId, String string, String name, String nickname, String desiredJob, String image, String introduce, String... links){
          Member member = new Member();
+         member.loginId = loginId;
+         member.password = string;
          member.name = name;
          member.nickname = nickname;
          member.desiredJob = desiredJob;
@@ -47,5 +54,19 @@ public class Member {
 
     public void changeState(StudyState state){
         this.state = state;
+    }
+
+    //==권한메서드(Setter)==//
+
+    public void setLoginId(String email){
+        this.loginId = email;
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
