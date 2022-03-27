@@ -32,7 +32,7 @@ class PostServiceTest {
         LocalDateTime time = LocalDateTime.now();
 
         //when (이런 기능을 동작했을 때)
-        Post p1 = Post.createPost(m1,title,introduce,text,time);
+        Post p1 = Post.createPost(m1,title,introduce,text,null,time);
         postService.save(p1);
 
         //then (이런 결과를 확인할 것)
@@ -52,7 +52,7 @@ class PostServiceTest {
         String text = "오늘의 목표\r\n - 세모공 개발 \r\n - 영어 회화 \r\n" ;
         LocalDateTime time = LocalDateTime.now();
 
-        Post p1 = Post.createPost(m1,title,introduce,text,time);
+        Post p1 = Post.createPost(m1,title,introduce,text,null,time);
         postService.save(p1);
 
         //when (이런 기능을 동작했을 때)

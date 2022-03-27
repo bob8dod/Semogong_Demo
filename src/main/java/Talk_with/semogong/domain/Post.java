@@ -25,7 +25,9 @@ public class Post {
     private String title;
     private String introduce;
     @Column(columnDefinition="TEXT")
-    private String text;
+    private String content;
+    @Column(columnDefinition="TEXT")
+    private String html;
     @ElementCollection
     private List<LocalDateTime> times = new ArrayList<>();
 
@@ -38,12 +40,13 @@ public class Post {
     }
 
     //==생성 메서드==//
-    public static Post createPost(Member member, String title, String introduce, String text, LocalDateTime time){
+    public static Post createPost(Member member, String title, String introduce, String content, String html ,LocalDateTime time){
         Post post = new Post();
         post.setMember(member);
         post.title = title;
         post.introduce = introduce;
-        post.text = text;
+        post.content = content;
+        post.html = html;
         post.times.add(time);
         post.createTime = time;
         return post;

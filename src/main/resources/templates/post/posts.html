@@ -21,7 +21,7 @@
                 <td th:text="${post.member.desiredJob}"></td>
                 <td th:text="${post.title}"></td> <!-- ?는 Null이면 아예 진행하지 않겠다는 것-->
                 <td th:text="${post.introduce}"></td>
-                <td th:text="${post.text}"></td>
+                <td th:text="${post.getContent}"></td>
             </tr>
             </tbody>
         </table>
