@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
-    <form role="form" action="/members/signup" th:object="${memberForm}" method="post">
+    <form role="form" th:if="${first}" action="/members/signup" th:object="${memberForm}" method="post">
         <!-- 해당 from 안에서는 memberForm을 사용하겠다는 것, memberForm은 Model을 통해 객체로 접근했기에 가능-->
         <div class="form-group">
             <label th:for="loginId">ID</label>
@@ -21,6 +21,30 @@
             <input type="password" th:field="*{password}" class="form-control" placeholder="이름을 입력하세요" th:class="${#fields.hasErrors('password')}? 'form-control fieldError' : 'form-control'">
             <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Incorrect date</p>
         </div>
+        <div class="form-group">
+            <label th:for="name">이름</label>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요" th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Incorrect date</p>
+        </div>
+        <div class="form-group">
+            <label th:for="nickname">닉네임</label>
+            <input type="text" th:field="*{nickname}" class="form-control"
+                   placeholder="도시를 입력하세요">
+        </div>
+        <div class="form-group">
+            <label th:for="desiredJob">희망 직무</label>
+            <input type="text" th:field="*{desiredJob}" class="form-control"
+                   placeholder="거리를 입력하세요">
+        </div>
+        <div class="form-group">
+            <label th:for="introduce">자기 소개</label>
+            <input type="text" th:field="*{introduce}" class="form-control" placeholder="간단하게 자기소개를 해주세요!" th:class="${#fields.hasErrors('introduce')}? 'form-control fieldError' : 'form-control'">
+            <p th:if="${#fields.hasErrors('introduce')}" th:errors="*{introduce}">Incorrect date</p>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <form role="form" th:if="${!first}" th:object="${memberForm}" method="post">
+        <!-- 해당 from 안에서는 memberForm을 사용하겠다는 것, memberForm은 Model을 통해 객체로 접근했기에 가능-->
         <div class="form-group">
             <label th:for="name">이름</label>
             <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요" th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">

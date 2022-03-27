@@ -23,7 +23,7 @@ public class PostRepository {
     }
 
     public List<Post> findAll() {
-        return em.createQuery("select p from Post p", Post.class).getResultList();
+        return em.createQuery("select p from Post p order by p.createTime DESC", Post.class).getResultList();
     }
 
     public List<Post> findByMember(Long memberId) {

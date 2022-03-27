@@ -3,6 +3,7 @@ package Talk_with.semogong.service;
 import Talk_with.semogong.domain.auth.MyUserDetail;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.StudyState;
+import Talk_with.semogong.domain.form.MemberForm;
 import Talk_with.semogong.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,5 +61,10 @@ public class MemberService implements UserDetailsService {
         //여기서 받은 유저 패스워드와 비교하여 로그인 인증
         Member user = memberRepository.findUserByEmail(email);
         return new MyUserDetail(user);
+    }
+
+    public void editMember(Long id, MemberForm memberForm) {
+        Member member = memberRepository.findOne(id);
+        member.edit(memberForm);
     }
 }

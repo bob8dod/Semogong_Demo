@@ -26,15 +26,12 @@ public class TotalController {
     @GetMapping("/studying") // 나중엔 로그인 된 회원의 id를 가져와 줘야됨. -> 회원 조회 및 회원 상태 변경을 위함
     public String studying(Authentication authentication){
 
-
-        MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
-        String loginId = userDetail.getEmail();
-        Long memberId = memberService.findByLoginId(loginId).getId(); // "박승일"로 로그인 했다고 가정, 해당 로그인된 회원의 ID를 가져옴
+        Long memberId = getLoginMemberId(authentication);
         StudyState state = memberService.checkState(memberId); // 현재 로그인된 회원의 상태를 조회
 
         // Case #1 (사용자의 현상태가 공부완료 -> 즉, 공부 시작)
         if (state == StudyState.END) {
-            memberService.changeState(memberId, StudyState.STUDYING);
+            memberService.changeState(memberId, StudyState.STUDYING); // posting 후 state change 필요 (오류 처리해야 됨)
             return "redirect:/posts/new";
         }
 
@@ -53,9 +50,7 @@ public class TotalController {
     @GetMapping("/breaking") // 나중엔 로그인 된 회원의 id를 가져와 줘야됨. -> 회원 조회 및 회원 상태 변경을 위함
     public String breaking(Authentication authentication){
 
-        MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
-        String loginId = userDetail.getEmail();
-        Long memberId = memberService.findByLoginId(loginId).getId(); // "박승일"로 로그인 했다고 가정, 해당 로그인된 회원의 ID를 가져옴
+        Long memberId = getLoginMemberId(authentication);
         StudyState state = memberService.checkState(memberId); // 현재 로그인된 회원의 상태를 조회
 
         // Case #1 (사용자의 현상태가 공부 중 -> 즉, 휴식 시작)
@@ -73,9 +68,7 @@ public class TotalController {
     @GetMapping("/end") // 나중엔 로그인 된 회원의 id를 가져와 줘야됨. -> 회원 조회 및 회원 상태 변경을 위함
     public String end(Authentication authentication){
 
-        MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
-        String loginId = userDetail.getEmail();
-        Long memberId = memberService.findByLoginId(loginId).getId(); // "박승일"로 로그인 했다고 가정, 해당 로그인된 회원의 ID를 가져옴
+        Long memberId = getLoginMemberId(authentication);
         StudyState state = memberService.checkState(memberId); // 현재 로그인된 회원의 상태를 조회
 
         // Case #1 (사용자의 현상태가 공부 중 -> 즉, 공부 완료)
@@ -92,5 +85,11 @@ public class TotalController {
         }
 
         return "redirect:/";
+    }
+
+    private Long getLoginMemberId(Authentication authentication) {
+        MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
+        String loginId = userDetail.getEmail();
+        return memberService.findByLoginId(loginId).getId(); // "박승일"로 로그인 했다고 가정, 해당 로그인된 회원의 ID를 가져옴
     }
 }

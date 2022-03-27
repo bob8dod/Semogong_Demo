@@ -1,6 +1,9 @@
 package Talk_with.semogong.domain;
 
+import Talk_with.semogong.domain.form.MemberForm;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id @GeneratedValue
@@ -56,8 +60,14 @@ public class Member {
         this.state = state;
     }
 
-    //==권한메서드(Setter)==//
+    public void edit(MemberForm memberForm) {
+        this.name = memberForm.getName();
+        this.nickname = memberForm.getNickname();
+        this.desiredJob = memberForm.getDesiredJob();
+        this.introduce = memberForm.getIntroduce();
+    }
 
+    //==권한메서드(Setter)==//
     public void setLoginId(String email){
         this.loginId = email;
     }
