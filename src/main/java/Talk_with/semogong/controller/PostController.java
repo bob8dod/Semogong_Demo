@@ -41,7 +41,7 @@ public class PostController {
 
     @PostMapping("/posts/new")
     public String create(@Valid PostForm postForm, BindingResult result, Authentication authentication) {
-        if (result.hasErrors()) { log.info("found Null, required re-post"); return "createPostForm"; }
+        if (result.hasErrors()) { log.info("found Null, required re-post"); return "post/createPostForm"; }
         Long memberId = getLoginMemberId(authentication);
         postForm.setHtml(markdownToHTML(postForm.getContent()));
         postService.post(memberId,postForm);

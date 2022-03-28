@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class Post {
     @Column(columnDefinition="TEXT")
     private String html;
     @ElementCollection
-    private List<LocalDateTime> times = new ArrayList<>();
+    private List<String> times = new ArrayList<>();
 
     private LocalDateTime createTime;
 
@@ -47,12 +48,16 @@ public class Post {
         post.introduce = introduce;
         post.content = content;
         post.html = html;
-        post.times.add(time);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String timeString = time.format(formatter);
+        post.times.add(timeString);
         post.createTime = time;
         return post;
     }
 
     public void addTime(LocalDateTime time) {
-        this.times.add(time);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String timeString = time.format(formatter);
+        this.times.add(timeString);
     }
 }

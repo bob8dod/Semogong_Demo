@@ -87,14 +87,22 @@
 <!--                            <a class="btn btn-warning" href="/breaking"> Breaking </a>-->
 <!--                            <a class="btn btn-secondary" href="/end"> End </a>-->
 <!--                        </div>-->
-                        <div class="card-body" th:if="${check}" th:object="${member}">
-                            <div class="input-group" th:text="|*{name} : *{desiredJob} , *{state}|"> NONE </div>
-                            <div class="btn-group" style="margin-top: 5px" role="group" aria-label="Basic mixed styles example">
-                                <a class="btn btn-success" href="/studying">STUDYING</a>
-                                <a class="btn btn-warning" href="/breaking">BREAKING</a>
-                                <a class="btn btn-secondary" href="/end">END</a>
+                        <div class="card-body"  th:if="${check}" th:object="${member}">
+                            <div class="make-center"><img src="/assets/favicon.ico"></div>
+                            <div class="input-group make-center">
+                                <div style="margin-right: 5px;" th:text="*{name}"> NONE </div>
+                                <div class="badge rounded-pill bg-light text-dark" th:text="*{state}"> 공부중 </div>
                             </div>
-                            <div style="margin-top: 5px" > <a class="btn btn-outline-dark btn-sm" th:href="@{/members/edit/{id} (id=*{id})}">EDIT</a> <a class="btn btn-outline-dark btn-sm" href="/members/logout">LOG OUT</a> </div>
+
+                            <div class="make-center" th:text="*{desiredJob}"> </div>
+                            <div class="make-center">
+                                <div class="input-group btn-group" role="group" aria-label="Basic mixed styles example">
+                                    <a class="btn btn-success" href="/studying">STUDYING</a>
+                                    <a class="btn btn-warning" href="/breaking">BREAKING</a>
+                                    <a class="btn btn-secondary" href="/end">END</a>
+                                </div>
+                            </div>
+                            <div class="make-center" style="margin: 5px" > <a class="btn btn-outline-dark btn-sm" th:href="@{/members/edit/{id} (id=*{id})}">EDIT</a> <a class="btn btn-outline-dark btn-sm" href="/members/logout">LOG OUT</a> </div>
                         </div>
 
                         <div class="card-header" th:if="${!check}">Log In</div>
