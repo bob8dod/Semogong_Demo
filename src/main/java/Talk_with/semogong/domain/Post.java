@@ -9,6 +9,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import static java.time.format.FormatStyle.LONG;
 
 @Entity
 @Getter
@@ -33,6 +36,7 @@ public class Post {
     private List<String> times = new ArrayList<>();
 
     private LocalDateTime createTime;
+    private String formatCreateTime;
 
     //==연관관계 메서드==//
     private void setMember(Member member){
@@ -48,10 +52,11 @@ public class Post {
         post.introduce = introduce;
         post.content = content;
         post.html = html;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String timeString = time.format(formatter);
-        post.times.add(timeString);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        post.times.add(time.format(timeFormatter));
         post.createTime = time;
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(LONG).withLocale(Locale.ENGLISH);
+        post.formatCreateTime = time.format(dateFormatter);
         return post;
     }
 

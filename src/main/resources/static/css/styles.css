@@ -2738,6 +2738,11 @@ textarea.form-control-lg {
   justify-content: center;
 }
 
+.make-align{
+  display: flex;
+  align-items: center;
+}
+
 .input-group {
   position: relative;
   display: flex;
