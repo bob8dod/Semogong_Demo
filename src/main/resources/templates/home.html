@@ -48,14 +48,21 @@
                         <div class="col-lg-6" th:if="${posts != null}" th:each="post:${posts}">
                             <!-- Blog post-->
                             <div class="card mb-4" >
-                                <a href="#!"><img class="card-img-top" src="/images/springbootpng.png" alt="..." /></a>
+                                <a href="#!"><img class="card-img-top" src="/images/springbootpng.png" alt="..." width="490" height="217"/></a>
                                 <a class="card-body list-group-item list-group-item-action" th:href="@{/posts/{id} (id=*{post.id})}">
                                     <div class="small text-muted" style="margin-bottom: 2px" th:text="${post.formatCreateTime}">January 1, 2021</div>
                                     <h2 class="card-title h5" th:text="${post.title}">Post Title</h2>
                                     <div class="card-text make-align"><img src="/images/profile.png" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${post.member.name}"></div></div>
                                     <div class="card-text"><p class="badge bg-secondary" style="margin: 3px" th:text="${post.member.desiredJob}"></p></div>
                                     <div class="card-text"><p class="badge" style="margin: 3px; background-color: #86b7fe;" th:text="${post.member.state}">공부 중</p></div>
-                                    <div class="card-text"><p class="badge" style="margin: 3px; background-color:#dfc2c4;" th:each="time:${post.times}" th:text="|${time}| + ' ~'">공부 중</p></div>
+                                    <div class="card-text">
+                                        <p class="badge" style="margin: 1px; background-color:#dfc2c4;" th:each="i: ${#numbers.sequence(1, #lists.size(post.times)-1,2)}" >
+                                            <th:block th:text="|${post.times[i -1]}| + ' ~ '+|${post.times[i]}|"> 19:00 ~ 20:00</th:block>
+                                        </p>
+                                        <p th:if="${#lists.size(post.times)%2!=0}" class="badge" style="margin: 1px; background-color: #dfc2c4;">
+                                            <th:block th:text="|${post.times[#lists.size(post.times)-1]}| + ' ~'"> 19:00 ~</th:block>
+                                        </p>
+                                    </div>
                                     <div class="card-text"><p class="small" style="margin: 3px" th:text="${post.introduce}"></p></div>
 <!--                                    <a class="btn btn-primary" th:href="@{/posts/{id} (id=*{post.id})}">Read more →</a>-->
                                 </a>
