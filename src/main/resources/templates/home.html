@@ -1,179 +1,178 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>SeMoGong</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="/css/styles.css" rel="stylesheet" />
-    </head>
-    <body>
-    <p>이재훈</p>
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="#!">SeMoGong</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="members/join">Join</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Today</a></li>
-                    </ul>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>SeMoGong</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="/css/styles.css" rel="stylesheet" />
+</head>
+<body>
+<!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#!">SeMoGong</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="members/join">Join</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Today</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Page header with logo and tagline-->
+<header class="py-5 bg-light border-bottom mb-4">
+    <div class="container">
+        <div class="text-center my-5">
+            <h1 class="fw-bolder">Welcome to SeMoGong!</h1>
+            <p class="lead mb-0">Share what you studied today</p>
+        </div>
+    </div>
+</header>
+<!-- Page content-->
+<div class="container">
+    <div class="row">
+        <!-- Blog entries-->
+        <div class="col-lg-8">
+            <!-- Featured blog post-->
+            <!-- Nested row for non-featured blog posts-->
+            <div class="row" >
+                <div class="col-lg-6" th:if="${posts != null}" th:each="post:${posts}">
+                    <!-- Blog post-->
+                    <div class="card mb-4" >
+                        <a href="#!"><img class="card-img-top" src="/images/springbootpng.png" alt="..." width="490" height="217"/></a>
+                        <a class="card-body list-group-item list-group-item-action" th:href="@{/posts/{id} (id=*{post.id})}">
+                            <div class="small text-muted" style="margin-bottom: 2px" th:text="${post.formatCreateTime}">January 1, 2021</div>
+                            <h2 class="card-title h5" th:text="${post.title}">Post Title</h2>
+                            <div class="card-text make-align"><img src="/images/profile.png" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${post.member.name}"></div></div>
+                            <div class="card-text"><p class="badge bg-secondary" style="margin: 3px" th:text="${post.member.desiredJob}"></p></div>
+                            <div class="card-text"><p class="badge" style="margin: 3px; background-color: #86b7fe;" th:text="${post.member.state}">공부 중</p></div>
+                            <div class="card-text">
+                                <p class="badge" style="margin: 1px; background-color:#dfc2c4;" th:each="i: ${#numbers.sequence(1, #lists.size(post.times)-1,2)}" >
+                                    <th:block th:text="|${post.times[i -1]}| + ' ~ '+|${post.times[i]}|"> 19:00 ~ 20:00</th:block>
+                                </p>
+                                <p th:if="${#lists.size(post.times)%2!=0}" class="badge" style="margin: 1px; background-color: #dfc2c4;">
+                                    <th:block th:text="|${post.times[#lists.size(post.times)-1]}| + ' ~'"> 19:00 ~</th:block>
+                                </p>
+                            </div>
+                            <div class="card-text"><p class="small" style="margin: 3px" th:text="${post.introduce}"></p></div>
+                            <!--                                    <a class="btn btn-primary" th:href="@{/posts/{id} (id=*{post.id})}">Read more →</a>-->
+                        </a>
+                    </div>
                 </div>
             </div>
-        </nav>
-        <!-- Page header with logo and tagline-->
-        <header class="py-5 bg-light border-bottom mb-4">
-            <div class="container">
-                <div class="text-center my-5">
-                    <h1 class="fw-bolder">Welcome to SeMoGong!</h1>
-                    <p class="lead mb-0">Share what you studied today</p>
+            <!-- Pagination-->
+            <nav aria-label="Pagination">
+                <hr class="my-0" />
+                <ul class="pagination justify-content-center my-4">
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
+                    <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">15</a></li>
+                    <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Side widgets-->
+        <div class="col-lg-4">
+            <!-- Search widget-->
+            <div class="card mb-4">
+                <div class="card-header" th:if="${check}">Profile</div>
+                <!--                        <div class="card-body" th:if="${check}" th:object="${member}">-->
+                <!--                            <div class="input-group" th:text="|*{name} : *{desiredJob} , *{state}|"> </div>-->
+                <!--                            <a class="btn btn-success" href="/studying"> Studying </a>-->
+                <!--                            <a class="btn btn-warning" href="/breaking"> Breaking </a>-->
+                <!--                            <a class="btn btn-secondary" href="/end"> End </a>-->
+                <!--                        </div>-->
+                <div class="card-body"  th:if="${check}" th:object="${member}">
+                    <div class="make-center"><img src="/images/profile.png" width="200" height="130" alt="profile img"></div>
+                    <div style="margin-top: 5px;" class="input-group make-center">
+                        <div style="margin-right: 5px;" th:text="*{name}"> NONE </div>
+                        <div class="badge rounded-pill bg-light text-dark" th:text="*{state}"> 공부중 </div>
+                    </div>
+
+                    <div class="make-center" th:text="*{desiredJob}"> </div>
+                    <div class="make-center">
+                        <div class="input-group btn-group" role="group" aria-label="Basic mixed styles example">
+                            <a class="btn btn-success" href="/studying">STUDYING</a>
+                            <a class="btn btn-warning" href="/breaking">BREAKING</a>
+                            <a class="btn btn-secondary" href="/end">END</a>
+                        </div>
+                    </div>
+                    <div class="make-center" style="margin: 5px" > <a class="btn btn-outline-dark btn-sm" th:href="@{/members/edit/{id} (id=*{id})}">EDIT</a> <a class="btn btn-outline-dark btn-sm" href="/members/logout">LOG OUT</a> </div>
+                </div>
+
+                <div class="card-header" th:if="${!check}">Log In</div>
+                <div class="card-body" th:if="${!check}">
+                    <form action="/member/login" method="post">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Id">
+                            <label for="username">Id</label>
+                        </div>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                            <label for="password">Password</label>
+                        </div>
+
+                        <div class="checkbox mb-3">
+                            <label>
+                                <input type="checkbox" value="remember-me"> Remember me
+                            </label>
+                        </div>
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">LOG IN</button>
+
+                    </form>
+                    <a style="margin-top: 5px" class="w-100 btn btn-lg btn-primary" href="/members/signup">SIGN UP</a>
+                </div>
+
+            </div>
+            <!-- Categories widget-->
+            <div class="card mb-4">
+                <div class="card-header">Categories</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">Web Design</a></li>
+                                <li><a href="#!">HTML</a></li>
+                                <li><a href="#!">Freebies</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <ul class="list-unstyled mb-0">
+                                <li><a href="#!">JavaScript</a></li>
+                                <li><a href="#!">CSS</a></li>
+                                <li><a href="#!">Tutorials</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </header>
-        <!-- Page content-->
-        <div class="container">
-            <div class="row">
-                <!-- Blog entries-->
-                <div class="col-lg-8">
-                    <!-- Featured blog post-->
-                    <!-- Nested row for non-featured blog posts-->
-                    <div class="row" >
-                        <div class="col-lg-6" th:if="${posts != null}" th:each="post:${posts}">
-                            <!-- Blog post-->
-                            <div class="card mb-4" >
-                                <a href="#!"><img class="card-img-top" src="/images/springbootpng.png" alt="..." width="490" height="217"/></a>
-                                <a class="card-body list-group-item list-group-item-action" th:href="@{/posts/{id} (id=*{post.id})}">
-                                    <div class="small text-muted" style="margin-bottom: 2px" th:text="${post.formatCreateTime}">January 1, 2021</div>
-                                    <h2 class="card-title h5" th:text="${post.title}">Post Title</h2>
-                                    <div class="card-text make-align"><img src="/images/profile.png" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${post.member.name}"></div></div>
-                                    <div class="card-text"><p class="badge bg-secondary" style="margin: 3px" th:text="${post.member.desiredJob}"></p></div>
-                                    <div class="card-text"><p class="badge" style="margin: 3px; background-color: #86b7fe;" th:text="${post.member.state}">공부 중</p></div>
-                                    <div class="card-text">
-                                        <p class="badge" style="margin: 1px; background-color:#dfc2c4;" th:each="i: ${#numbers.sequence(1, #lists.size(post.times)-1,2)}" >
-                                            <th:block th:text="|${post.times[i -1]}| + ' ~ '+|${post.times[i]}|"> 19:00 ~ 20:00</th:block>
-                                        </p>
-                                        <p th:if="${#lists.size(post.times)%2!=0}" class="badge" style="margin: 1px; background-color: #dfc2c4;">
-                                            <th:block th:text="|${post.times[#lists.size(post.times)-1]}| + ' ~'"> 19:00 ~</th:block>
-                                        </p>
-                                    </div>
-                                    <div class="card-text"><p class="small" style="margin: 3px" th:text="${post.introduce}"></p></div>
-<!--                                    <a class="btn btn-primary" th:href="@{/posts/{id} (id=*{post.id})}">Read more →</a>-->
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Pagination-->
-                    <nav aria-label="Pagination">
-                        <hr class="my-0" />
-                        <ul class="pagination justify-content-center my-4">
-                            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-                            <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">Older</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <!-- Side widgets-->
-                <div class="col-lg-4">
-                    <!-- Search widget-->
-                    <div class="card mb-4">
-                        <div class="card-header" th:if="${check}">Profile</div>
-<!--                        <div class="card-body" th:if="${check}" th:object="${member}">-->
-<!--                            <div class="input-group" th:text="|*{name} : *{desiredJob} , *{state}|"> </div>-->
-<!--                            <a class="btn btn-success" href="/studying"> Studying </a>-->
-<!--                            <a class="btn btn-warning" href="/breaking"> Breaking </a>-->
-<!--                            <a class="btn btn-secondary" href="/end"> End </a>-->
-<!--                        </div>-->
-                        <div class="card-body"  th:if="${check}" th:object="${member}">
-                            <div class="make-center"><img src="/images/profile.png" width="200" height="130" alt="profile img"></div>
-                            <div style="margin-top: 5px;" class="input-group make-center">
-                                <div style="margin-right: 5px;" th:text="*{name}"> NONE </div>
-                                <div class="badge rounded-pill bg-light text-dark" th:text="*{state}"> 공부중 </div>
-                            </div>
-
-                            <div class="make-center" th:text="*{desiredJob}"> </div>
-                            <div class="make-center">
-                                <div class="input-group btn-group" role="group" aria-label="Basic mixed styles example">
-                                    <a class="btn btn-success" href="/studying">STUDYING</a>
-                                    <a class="btn btn-warning" href="/breaking">BREAKING</a>
-                                    <a class="btn btn-secondary" href="/end">END</a>
-                                </div>
-                            </div>
-                            <div class="make-center" style="margin: 5px" > <a class="btn btn-outline-dark btn-sm" th:href="@{/members/edit/{id} (id=*{id})}">EDIT</a> <a class="btn btn-outline-dark btn-sm" href="/members/logout">LOG OUT</a> </div>
-                        </div>
-
-                        <div class="card-header" th:if="${!check}">Log In</div>
-                        <div class="card-body" th:if="${!check}">
-                            <form action="/member/login" method="post">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="username" name="username" placeholder="Id">
-                                    <label for="username">Id</label>
-                                </div>
-                                <div class="form-floating">
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                                    <label for="password">Password</label>
-                                </div>
-
-                                <div class="checkbox mb-3">
-                                    <label>
-                                        <input type="checkbox" value="remember-me"> Remember me
-                                    </label>
-                                </div>
-                                <button class="w-100 btn btn-lg btn-primary" type="submit">LOG IN</button>
-
-                            </form>
-                            <a style="margin-top: 5px" class="w-100 btn btn-lg btn-primary" href="/members/signup">SIGN UP</a>
-                        </div>
-
-                    </div>
-                    <!-- Categories widget-->
-                    <div class="card mb-4">
-                        <div class="card-header">Categories</div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">Web Design</a></li>
-                                        <li><a href="#!">HTML</a></li>
-                                        <li><a href="#!">Freebies</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="#!">JavaScript</a></li>
-                                        <li><a href="#!">CSS</a></li>
-                                        <li><a href="#!">Tutorials</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Side widget-->
-                    <div class="card mb-4">
-                        <div class="card-header">Side Widget</div>
-                        <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
-                    </div>
-                </div>
+            <!-- Side widget-->
+            <div class="card mb-4">
+                <div class="card-header">Side Widget</div>
+                <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and feature the Bootstrap 5 card component!</div>
             </div>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="/js/scripts.js"></script>
-    </body>
+    </div>
+</div>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+    <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="/js/scripts.js"></script>
+</body>
 </html>
