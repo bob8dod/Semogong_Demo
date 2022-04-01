@@ -42,10 +42,10 @@ public class Member {
 
 
     //==생성 메서드==//
-    public static Member createMember(String loginId, String string, String name, String nickname, String desiredJob, String image, String introduce, String... links){
+    public static Member createMember(String loginId, String password, String name, String nickname, String desiredJob, String image, String introduce, String... links){
          Member member = new Member();
          member.loginId = loginId;
-         member.password = string;
+         member.password = password;
          member.name = name;
          member.nickname = nickname;
          member.desiredJob = desiredJob;

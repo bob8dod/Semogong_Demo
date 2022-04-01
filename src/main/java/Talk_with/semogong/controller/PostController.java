@@ -56,13 +56,6 @@ public class PostController {
         return "post/checkPost";
     }
 
-    @GetMapping("/posts")
-    public String memberList(Model model) {
-        model.addAttribute("posts", postService.findAll());
-        log.info("Searching Posts");
-        return "post/posts";
-    }
-
     private Long getLoginMemberId(Authentication authentication) {
         MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
         String loginId = userDetail.getEmail();

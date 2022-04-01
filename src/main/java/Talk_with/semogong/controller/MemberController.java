@@ -45,13 +45,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/members")
-    public String memberList(Model model) {
-        model.addAttribute("members", memberService.findAll());
-        log.info("Searching Members");
-        return "member/memberList";
-    }
-
     @GetMapping("/members/edit/{id}")
     public String memberEdit(@PathVariable("id") Long id, Model model) {
         Member member = memberService.findOne(id);
