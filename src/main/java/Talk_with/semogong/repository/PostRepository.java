@@ -26,8 +26,15 @@ public class PostRepository {
         return em.createQuery("select p from Post p order by p.createTime DESC", Post.class).getResultList();
     }
 
-    public List<Post> findByMember(Long memberId) {
+    public Post findByMember(Long memberId) {
         return em.createQuery("select p from Post p join p.member m where m.id = :id order by p.createTime DESC", Post.class)
-                .setParameter("id", memberId).getResultList();
+                .setParameter("id", memberId).setMaxResults(1).getSingleResult();
+    }
+
+    public List<Post> findByPaging(Integer offset) {
+        return em.createQuery("select p from Post p order by p.createTime DESC", Post.class)
+                .setFirstResult(Integer.parseInt(offset.toString()))
+                .setMaxResults(12)
+                .getResultList();
     }
 }

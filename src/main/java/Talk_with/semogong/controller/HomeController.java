@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -34,7 +35,26 @@ public class HomeController {
         else{
             model.addAttribute("check",false);
         }
-        model.addAttribute("posts",postService.findAll());
+        model.addAttribute("page",-1);
+        model.addAttribute("posts",postService.findByPage(0));
+        return "home";
+    }
+
+    @RequestMapping("/{page}")
+    public String home_page(@PathVariable("page") Integer page, Model model, Authentication authentication){
+        log.info("opened home");
+        if (authentication != null) {
+            Member member = getLoginMember(authentication);
+            MemberForm memberForm = createMemberForm(member);
+
+            model.addAttribute("check",true);
+            model.addAttribute("member", memberForm);
+        }
+        else{
+            model.addAttribute("check",false);
+        }
+        model.addAttribute("posts",postService.findByPage((page-1)*12));
+        model.addAttribute("page",page);
         return "home";
     }
 

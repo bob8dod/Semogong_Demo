@@ -35,6 +35,7 @@ public class Post {
     @ElementCollection
     private List<String> times = new ArrayList<>();
 
+//    private StudyState state;
     private LocalDateTime createTime;
     private String formatCreateTime;
 

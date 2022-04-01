@@ -38,7 +38,11 @@ public class PostService {
 
     // 상태 클릭에 따른 post 시간 변경
     public void addTime(Long memberId, LocalDateTime time) {
-        Post post = postRepository.findByMember(memberId).get(0); // memberId 에 따른 Post
+        Post post = postRepository.findByMember(memberId); // memberId 에 따른 Post
         post.addTime(time);
+    }
+
+    public List<Post> findByPage(Integer offset) {
+        return postRepository.findByPaging(offset);
     }
 }
