@@ -184,7 +184,20 @@
                             <p th:text="'상태 : ' + ${post.member.state}"> Member's State </p>
                             <p th:text="'희망 직무 : ' + ${post.member.desiredJob}"> Member's Desired Job </p>
                             <p th:text="'오늘의 한줄 : ' + ${post.introduce}"> Post Introduce </p>
-
+                            <div>
+                                <form role="form" th:action="@{/posts/comment/{id} (id=${post.id})}" th:object="${commentForm}" method="post">
+                                    <div class="form-group">
+                                        <label th:for="loginId">ID</label>
+                                        <input type="text" th:field="*{comment}" class="form-control" placeholder="이름을 입력하세요">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                                <div th:each="comment:${post.comments}" >
+                                    <p th:text="${comment.member.name}">작성자</p>
+                                    <p th:text="${comment.content}">댓글 내용</p>
+                                </div>
+                            </div>
+                            <hr/>
                             <p class="mb-4" th:utext="${post.html}"> Content by HTML </p>
 <!--                            <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">-->
 <!--                                <i class="fas fa-times fa-fw"></i>-->

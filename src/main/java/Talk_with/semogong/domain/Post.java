@@ -35,6 +35,9 @@ public class Post {
     @ElementCollection
     private List<String> times = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
+
 //    private StudyState state;
     private LocalDateTime createTime;
     private String formatCreateTime;

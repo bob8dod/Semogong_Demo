@@ -1,7 +1,9 @@
 package Talk_with.semogong.controller;
 
+import Talk_with.semogong.domain.Comment;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.auth.MyUserDetail;
+import Talk_with.semogong.domain.form.CommentForm;
 import Talk_with.semogong.domain.form.MemberForm;
 import Talk_with.semogong.service.MemberService;
 import Talk_with.semogong.service.PostService;
@@ -37,6 +39,7 @@ public class HomeController {
         }
         model.addAttribute("page",-1);
         model.addAttribute("posts",postService.findByPage(0));
+        model.addAttribute("commentForm", new CommentForm());
         return "home";
     }
 
