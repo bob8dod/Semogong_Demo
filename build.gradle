@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.webjars:bootstrap:4.0.0-2'
 	implementation 'org.webjars:font-awesome:5.11.2'
 	implementation 'com.atlassian.commonmark:commonmark:0.13.1'
+	implementation 'mysql:mysql-connector-java'
 	compileOnly 'org.projectlombok:lombok'
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
 	runtimeOnly 'com.h2database:h2'
