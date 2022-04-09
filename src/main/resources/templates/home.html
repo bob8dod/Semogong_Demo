@@ -52,9 +52,9 @@
                       <div class="card-body list-group-item list-group-item-action" data-bs-toggle="modal" th:attr="data-bs-target='#postModal'+${post.id}">  <!-- th:href="@{/posts/{id} (id=*{post.id})}"-->
 <!--                            <div class="small text-muted" style="margin-bottom: 2px" th:text="${post.formatCreateTime}">January 1, 2021</div>-->
                             <h2 class="card-title h5" th:text="${post.title}">Post Title</h2>
-                            <div class="card-text make-align"><img src="/images/profile.png" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${post.member.name}"></div></div>
-                            <div class="card-text"><p class="badge bg-secondary" style="margin: 3px" th:text="${post.member.desiredJob}"></p></div>
-                            <div class="card-text"><p class="badge" style="margin: 3px; background-color: #86b7fe;" th:text="${post.member.state}">공부 중</p></div>
+                            <div class="card-text make-align"><img src="/images/profile.png" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${post.memberName}"></div></div>
+                            <div class="card-text"><p class="badge bg-secondary" style="margin: 3px" th:text="${post.memberDesiredJob}"></p></div>
+                            <div class="card-text"><p class="badge" style="margin: 3px; background-color: #86b7fe;" th:text="${post.state}">공부 중</p></div>
                             <div class="card-text">
                                 <p class="badge" style="margin: 1px; background-color:#dfc2c4;" th:each="i: ${#numbers.sequence(1, #lists.size(post.times)-1,2)}" >
                                     <th:block th:text="|${post.times[i -1]}| + ' ~ '+|${post.times[i]}|"> 19:00 ~ 20:00</th:block>
@@ -168,34 +168,41 @@
 </footer>
 <!-- Post Modals -->
 <div th:if="${posts != null}" th:each="post:${posts}" class="portfolio-modal modal fade" th:id="'postModal' + ${post.id}" tabindex="-1" aria-labelledby="portfolioModal1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+           <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
            <div class="modal-body pb-5"> <!-- text-center-->
                 <div class="container">
-                    <div class="row"> <!--justify-content-center-->
+                    <div class="row justify-content-center"> <!--justify-content-center-->
                         <div class="col-lg-8">
                             <!-- Post Modal - Image-->
-                            <img class="img-fluid rounded" src="/images/springbootpng.png" alt="..." />
+                            <div class="text-center"><img class="img-fluid rounded" src="/images/springbootpng.png" alt="..." /></div>
                             <!-- Post Modal - Title-->
-                            <h1 class="portfolio-modal-title text-secondary text-uppercase mb-0" th:text="${post.title}"></h1>
+                            <h1 class="display-3" sytle="font-weight: bold;" th:text="${post.title}"></h1>
                             <!-- Portfolio Modal - Text-->
-                            <p th:text="'작성자 : ' + ${post.member.name}"> Member's Name </p>
-                            <p th:text="'상태 : ' + ${post.member.state}"> Member's State </p>
-                            <p th:text="'희망 직무 : ' + ${post.member.desiredJob}"> Member's Desired Job </p>
-                            <p th:text="'오늘의 한줄 : ' + ${post.introduce}"> Post Introduce </p>
+                            <div class="card-text" th:text="'작성자 : ' + ${post.memberName}"> Member's Name </div>
+                            <div class="card-text" th:text="'상태 : ' + ${post.state}"> Member's State </div>
+                            <div class="card-text" th:text="'희망 직무 : ' + ${post.memberDesiredJob}"> Member's Desired Job </div>
+                            <div class="card-text" th:text="'오늘의 한줄 : ' + ${post.introduce}"> Post Introduce </div>
+                            <div class="card-text">
+                                <p style="display: inline-block"> 학습 시간 : </p>
+                                <p class="badge" style="margin: 1px; background-color:#dfc2c4;" th:each="i: ${#numbers.sequence(1, #lists.size(post.times)-1,2)}" >
+                                    <th:block th:text="|${post.times[i -1]}| + ' ~ '+|${post.times[i]}|"> 19:00 ~ 20:00</th:block>
+                                </p>
+                                <p th:if="${#lists.size(post.times)%2!=0}" class="badge" style="margin: 1px; background-color: #dfc2c4;">
+                                    <th:block th:text="|${post.times[#lists.size(post.times)-1]}| + ' ~'"> 19:00 ~</th:block>
+                                </p>
+                            </div>
+                            <hr/>
                             <div>
-                                <form role="form" th:action="@{/posts/comment/{id} (id=${post.id})}" th:object="${commentForm}" method="post">
-                                    <div class="form-group">
-                                        <label th:for="loginId">ID</label>
-                                        <input type="text" th:field="*{comment}" class="form-control" placeholder="이름을 입력하세요">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </form>
                                 <div th:each="comment:${post.comments}" >
-                                    <p th:text="${comment.member.name}">작성자</p>
+                                    <p th:text="${comment.memberName}">작성자</p>
                                     <p th:text="${comment.content}">댓글 내용</p>
                                 </div>
+                                <form class="input-group mb-3" role="form" th:action="@{/posts/comment/{id} (id=${post.id})}" th:object="${commentForm}" method="post">
+                                    <input type="text" th:field="*{comment}" class="form-control" placeholder="댓글을 작성해 보세요!">
+                                    <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                                </form>
                             </div>
                             <hr/>
                             <p class="mb-4" th:utext="${post.html}"> Content by HTML </p>
@@ -210,6 +217,8 @@
         </div>
     </div>
 </div>
+
+
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->

@@ -1,6 +1,7 @@
 package Talk_with.semogong.service;
 
 import Talk_with.semogong.domain.Post;
+import Talk_with.semogong.domain.StudyState;
 import Talk_with.semogong.domain.form.PostForm;
 import Talk_with.semogong.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,5 +45,14 @@ public class PostService {
 
     public List<Post> findByPage(Integer offset) {
         return postRepository.findByPaging(offset);
+    }
+
+    public void changeState(Long postId, StudyState state) {
+        Post post = postRepository.findOne(postId);
+        post.editState(state);
+    }
+
+    public Long getRecentPostId(Long memberId) {
+        return postRepository.findByMember(memberId).getId();
     }
 }

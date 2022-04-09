@@ -23,7 +23,7 @@ public class TotalController {
 
 
     // 공부중 클릭
-    @GetMapping("/studying") // 나중엔 로그인 된 회원의 id를 가져와 줘야됨. -> 회원 조회 및 회원 상태 변경을 위함
+    @GetMapping("/studying")
     public String studying(Authentication authentication){
 
         Long memberId = getLoginMemberId(authentication);
@@ -35,9 +35,12 @@ public class TotalController {
             return "redirect:/posts/new";
         }
 
+        Long postId = postService.getRecentPostId(memberId);
+
         // Case #2 (사용자의 현상태가 휴식 중 -> 즉, 공부 재시작)
         if (state == StudyState.BREAKING) {
             memberService.changeState(memberId, StudyState.STUDYING);
+            postService.changeState(postId, StudyState.STUDYING);
             postService.addTime(memberId, LocalDateTime.now());
             return "redirect:/";
         }
@@ -47,7 +50,7 @@ public class TotalController {
     }
 
     // 휴식중 클릭
-    @GetMapping("/breaking") // 나중엔 로그인 된 회원의 id를 가져와 줘야됨. -> 회원 조회 및 회원 상태 변경을 위함
+    @GetMapping("/breaking")
     public String breaking(Authentication authentication){
 
         Long memberId = getLoginMemberId(authentication);
@@ -55,7 +58,9 @@ public class TotalController {
 
         // Case #1 (사용자의 현상태가 공부 중 -> 즉, 휴식 시작)
         if (state == StudyState.STUDYING) {
+            Long postId = postService.getRecentPostId(memberId);
             memberService.changeState(memberId, StudyState.BREAKING);
+            postService.changeState(postId, StudyState.BREAKING);
             postService.addTime(memberId, LocalDateTime.now());
             return "redirect:/";
         }
@@ -65,26 +70,33 @@ public class TotalController {
     }
 
     // 완료 클릭
-    @GetMapping("/end") // 나중엔 로그인 된 회원의 id를 가져와 줘야됨. -> 회원 조회 및 회원 상태 변경을 위함
+    @GetMapping("/end")
     public String end(Authentication authentication){
 
         Long memberId = getLoginMemberId(authentication);
         StudyState state = memberService.checkState(memberId); // 현재 로그인된 회원의 상태를 조회
 
+        // Case #3 (사용자의 현상태가 공부 완료 -> 오류)
+        if (state == StudyState.END) {
+            return "redirect:/";
+        }
+        Long postId = postService.getRecentPostId(memberId);
+
         // Case #1 (사용자의 현상태가 공부 중 -> 즉, 공부 완료)
         if (state == StudyState.STUDYING) {
             memberService.changeState(memberId, StudyState.END);
+            postService.changeState(postId, StudyState.END);
             postService.addTime(memberId, LocalDateTime.now());
             return "redirect:/";
         }
 
         // Case #2 (사용자의 현상태가 휴식 중 -> 그대로 상태 변경 후 종료)
-        if (state == StudyState.BREAKING) {
+        else {
             memberService.changeState(memberId, StudyState.END);
+            postService.changeState(postId, StudyState.END);
             return "redirect:/";
         }
 
-        return "redirect:/";
     }
 
     private Long getLoginMemberId(Authentication authentication) {

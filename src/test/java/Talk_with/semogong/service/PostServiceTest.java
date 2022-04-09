@@ -58,11 +58,11 @@ class PostServiceTest {
         //when (이런 기능을 동작했을 때)
         postService.addTime(m1.getId(), LocalDateTime.now());
 
-        //then (이런 결과를 확인할 것)
-        for (LocalDateTime t : postService.findOne(p1.getId()).getTimes()){
-            System.out.print("t = " + t + "   ");
-        }
-        System.out.println();
+//        //then (이런 결과를 확인할 것)
+//        for (LocalDateTime t : postService.findOne(p1.getId()).getTimes()){
+//            System.out.print("t = " + t + "   ");
+//        }
+//        System.out.println();
 
     }
 

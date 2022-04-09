@@ -28,6 +28,8 @@ public class Post {
 
     private String title;
     private String introduce;
+    @Enumerated(EnumType.STRING)
+    private StudyState state;
     @Column(columnDefinition="TEXT")
     private String content;
     @Column(columnDefinition="TEXT")
@@ -61,6 +63,7 @@ public class Post {
         post.createTime = time;
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate(LONG).withLocale(Locale.ENGLISH);
         post.formatCreateTime = time.format(dateFormatter);
+        post.state = StudyState.STUDYING;
         return post;
     }
 
@@ -68,5 +71,9 @@ public class Post {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String timeString = time.format(formatter);
         this.times.add(timeString);
+    }
+
+    public void editState(StudyState state) {
+        this.state = state;
     }
 }
