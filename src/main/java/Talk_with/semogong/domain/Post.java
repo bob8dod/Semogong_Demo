@@ -1,5 +1,6 @@
 package Talk_with.semogong.domain;
 
+import Talk_with.semogong.domain.form.PostEditForm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,4 +77,16 @@ public class Post {
     public void editState(StudyState state) {
         this.state = state;
     }
+
+    //==수정 메서드==//
+    public void edit(PostEditForm postEditForm) {
+        this.title = postEditForm.getTitle();
+        this.introduce = postEditForm.getIntroduce();
+        this.content = postEditForm.getContent();
+        this.html = postEditForm.getHtml();
+//        this.times = post.getTimes();
+    }
+
+
+
 }

@@ -206,10 +206,10 @@
                             </div>
                             <hr/>
                             <p class="mb-4" th:utext="${post.html}"> Content by HTML </p>
-<!--                            <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">-->
-<!--                                <i class="fas fa-times fa-fw"></i>-->
-<!--                                Close Window-->
-<!--                            </button>-->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+<!--                                <button class="btn btn-primary me-md-2" type="button">Button</button>-->
+                                <a class="btn btn-secondary btn-sm" th:href="@{/posts/{id}/edit (id=*{post.id})}"type="button">Edit</a>
+                            </div>
                         </div>
                     </div>
                 </div>
