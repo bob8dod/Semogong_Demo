@@ -37,6 +37,9 @@ public class Post {
     private String html;
     @ElementCollection
     private List<String> times = new ArrayList<>();
+    @Embedded
+    private Image image;
+
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
@@ -84,9 +87,12 @@ public class Post {
         this.introduce = postEditForm.getIntroduce();
         this.content = postEditForm.getContent();
         this.html = postEditForm.getHtml();
-//        this.times = post.getTimes();
+        this.times = postEditForm.getTimes();
     }
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
 
 
 }

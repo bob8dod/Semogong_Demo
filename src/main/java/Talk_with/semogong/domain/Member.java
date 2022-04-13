@@ -34,7 +34,8 @@ public class Member {
 
     @ElementCollection
     private List<String> links = new ArrayList<>();
-    private String image;
+    @Embedded
+    private Image image;
     private String introduce;
 
     @OneToMany(mappedBy = "member")
@@ -42,16 +43,14 @@ public class Member {
 
 
     //==생성 메서드==//
-    public static Member createMember(String loginId, String password, String name, String nickname, String desiredJob, String image, String introduce, String... links){
+    public static Member createMember(String loginId, String password, String name, String nickname, String desiredJob, Image image, String introduce, String... links){
          Member member = new Member();
          member.loginId = loginId;
          member.password = password;
          member.name = name;
          member.nickname = nickname;
          member.desiredJob = desiredJob;
-         member.image = image;
          member.introduce = introduce;
-         if(links != null) member.links.addAll(Arrays.asList(links));
          member.state = StudyState.END;
          return member;
     }
@@ -65,6 +64,7 @@ public class Member {
         this.nickname = memberForm.getNickname();
         this.desiredJob = memberForm.getDesiredJob();
         this.introduce = memberForm.getIntroduce();
+        this.links = memberForm.getLinks();
     }
 
     //==권한메서드(Setter)==//
@@ -78,5 +78,9 @@ public class Member {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }

@@ -1,5 +1,6 @@
 package Talk_with.semogong.domain.form;
 
+import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.StudyState;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class MemberForm {
     private StudyState state;
 
     private List<String> links = new ArrayList<>();
-    private String image;
+    private Image image;
 
     private String introduce;
 

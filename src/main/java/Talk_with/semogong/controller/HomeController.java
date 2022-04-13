@@ -1,9 +1,6 @@
 package Talk_with.semogong.controller;
 
-import Talk_with.semogong.domain.Comment;
-import Talk_with.semogong.domain.Member;
-import Talk_with.semogong.domain.Post;
-import Talk_with.semogong.domain.StudyState;
+import Talk_with.semogong.domain.*;
 import Talk_with.semogong.domain.auth.MyUserDetail;
 import Talk_with.semogong.domain.form.CommentForm;
 import Talk_with.semogong.domain.form.MemberForm;
@@ -12,15 +9,21 @@ import Talk_with.semogong.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.tomcat.util.descriptor.web.ResourceBase;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,23 +35,24 @@ public class HomeController {
     private final PostService postService;
     private final MemberService memberService;
 
+
     @RequestMapping("/")
-    public String home(Model model, Authentication authentication){
+    public String home(Model model, Authentication authentication) {
+
         log.info("opened home");
         if (authentication != null) {
             Member member = getLoginMember(authentication);
             MemberForm memberForm = createMemberForm(member);
 
-            model.addAttribute("check",true);
+            model.addAttribute("check", true);
             model.addAttribute("member", memberForm);
-        }
-        else{
-            model.addAttribute("check",false);
+        } else {
+            model.addAttribute("check", false);
         }
         List<Post> posts = postService.findByPage(0);
         List<PostViewDto> postDtos = posts.stream().map(PostViewDto::new).collect(Collectors.toList());
-        model.addAttribute("page",-1);
-        model.addAttribute("posts",postDtos);
+        model.addAttribute("page", -1);
+        model.addAttribute("posts", postDtos);
         model.addAttribute("commentForm", new CommentForm());
         return "home";
     }
@@ -73,9 +77,12 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/home_temp")
-    public String home_temp(){
-        return "home_temp";
+
+    @ResponseBody
+    @GetMapping("/images")
+    public Resource showImage(@RequestParam("filename") String filename) throws MalformedURLException {
+        String rootPath = "C:\\Users\\bob8d\\OneDrive\\Desktop\\Semgong\\semogong\\src\\main\\resources\\static\\images\\";
+        return new UrlResource( "file:" + rootPath + filename);
     }
 
     private Member getLoginMember(Authentication authentication) {
@@ -93,6 +100,7 @@ public class HomeController {
         memberForm.setDesiredJob(member.getDesiredJob());
         memberForm.setIntroduce(member.getIntroduce());
         memberForm.setState(member.getState());
+        memberForm.setImage(member.getImage());
         return memberForm;
     }
 
@@ -109,6 +117,8 @@ public class HomeController {
         private List<String> times = new ArrayList<>();
         private List<CommentViewDto> comments = new ArrayList<>();
         private StudyState state;
+        private Image postImg;
+        private Image memberImg;
 
         // Member Info
         private String memberName;
@@ -129,6 +139,8 @@ public class HomeController {
             this.memberName = post.getMember().getName();
             this.memberNickname = post.getMember().getNickname();;
             this.memberDesiredJob = post.getMember().getDesiredJob();
+            this.postImg = post.getImage();
+            this.memberImg = post.getMember().getImage();
         }
 
     }
@@ -140,6 +152,7 @@ public class HomeController {
         private Long id;
         private String content;
         private LocalDateTime createTime;
+        private Image memberImg;
 
         // Member Info
         private String memberName;
@@ -149,6 +162,7 @@ public class HomeController {
             this.content = comment.getContent();
             this.createTime = comment.getCreateTime();
             this.memberName = comment.getMember().getName();
+            this.memberImg = comment.getMember().getImage();
         }
     }
 

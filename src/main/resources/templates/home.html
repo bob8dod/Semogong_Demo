@@ -48,11 +48,11 @@
                 <div class="col-lg-6" th:if="${posts != null}" th:each="post:${posts}">
                     <!-- Blog post-->
                     <div class="card mb-4" data-bs-toggle="modal" th:attr="data-bs-target='#postModal'+${post.id}">
-                        <img class="card-img-top" src="/images/springbootpng.png" alt="..." width="490" height="217"/>
+                        <img class="card-img-top" th:src="'/images?filename='+ ${post.postImg?.imgSrc}" alt="..." width="490" height="217"/>
                       <div class="card-body list-group-item list-group-item-action" data-bs-toggle="modal" th:attr="data-bs-target='#postModal'+${post.id}">  <!-- th:href="@{/posts/{id} (id=*{post.id})}"-->
 <!--                            <div class="small text-muted" style="margin-bottom: 2px" th:text="${post.formatCreateTime}">January 1, 2021</div>-->
                             <h2 class="card-title h5" th:text="${post.title}">Post Title</h2>
-                            <div class="card-text make-align"><img src="/images/profile.png" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${post.memberName}"></div></div>
+                            <div class="card-text make-align"><img th:src="'/images?filename='+ ${post.memberImg?.imgSrc}" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${post.memberName}"></div></div>
                             <div class="card-text"><p class="badge bg-secondary" style="margin: 3px" th:text="${post.memberDesiredJob}"></p></div>
                             <div class="card-text"><p class="badge" style="margin: 3px; background-color: #86b7fe;" th:text="${post.state}">공부 중</p></div>
                             <div class="card-text">
@@ -91,7 +91,7 @@
                 <!--                            <a class="btn btn-secondary" href="/end"> End </a>-->
                 <!--                        </div>-->
                 <div class="card-body"  th:if="${check}" th:object="${member}">
-                    <div class="make-center"><img src="/images/profile.png" width="200" height="130" alt="profile img"></div>
+                    <div class="make-center"><img th:src="'/images?filename='+ *{image?.imgSrc}" width="200" height="130" alt="profile img"></div>
                     <div style="margin-top: 5px;" class="input-group make-center">
                         <div style="margin-right: 5px;" th:text="*{name}"> NONE </div>
                         <div class="badge rounded-pill bg-light text-dark" th:text="*{state}"> 공부중 </div>
@@ -176,7 +176,7 @@
                     <div class="row justify-content-center"> <!--justify-content-center-->
                         <div class="col-lg-8">
                             <!-- Post Modal - Image-->
-                            <div class="text-center"><img class="img-fluid rounded" src="/images/springbootpng.png" alt="..." /></div>
+                            <div class="text-center"><img class="img-fluid rounded" th:src="'/images?filename='+ ${post.postImg?.imgSrc}" alt="..." /></div>
                             <!-- Post Modal - Title-->
                             <h1 class="display-3" sytle="font-weight: bold;" th:text="${post.title}"></h1>
                             <!-- Portfolio Modal - Text-->
@@ -196,6 +196,7 @@
                             <hr/>
                             <div>
                                 <div th:each="comment:${post.comments}" >
+                                    <img th:src="'/images?filename='+ ${comment.memberImg?.imgSrc}" width="30px" height="20px">
                                     <p th:text="${comment.memberName}">작성자</p>
                                     <p th:text="${comment.content}">댓글 내용</p>
                                 </div>

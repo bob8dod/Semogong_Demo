@@ -6,8 +6,11 @@
         border-color: #bd2130;
     }
 </style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
 <div class="container">
+
+    <!--ver1-->
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <form role="form" th:if="${first}" action="/members/signup" th:object="${memberForm}" method="post">
         <!-- 해당 from 안에서는 memberForm을 사용하겠다는 것, memberForm은 Model을 통해 객체로 접근했기에 가능-->
@@ -43,6 +46,22 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
+
+
+
+    <!--ver2-->
+    <iframe id="iframe1" name="iframe1" style="display:none"></iframe>
+    <form role="form" th:if="${!first}" th:action="@{/members/edit/{id}/img (id=${memberForm.id})} " method="post" target="iframe1" enctype="multipart/form-data">
+    <div class="form-group">
+        <label th:for="image" style="display: inline-block">프로필 이미지</label>
+        <div th:if="${memberForm.image != null}" style="display: inline-block"> ( 현재 <p style="display: inline-block" th:text="${memberForm.image?.imgName}"> </p> 로 설정 되어 있습니다. 수정을 원하신다면 파일을 새로 선택 후 Upload 버튼을 눌러주세요.)</div>
+        <div class="input-group">
+        <input class="form-control" name="file" type="file" accept=".jpg, .png">
+        <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Upload</button>
+        </div>
+    </div>
+    </form>
     <form role="form" th:if="${!first}" th:object="${memberForm}" method="post">
         <!-- 해당 from 안에서는 memberForm을 사용하겠다는 것, memberForm은 Model을 통해 객체로 접근했기에 가능-->
         <div class="form-group">
@@ -65,10 +84,45 @@
             <input type="text" th:field="*{introduce}" class="form-control" placeholder="간단하게 자기소개를 해주세요!" th:class="${#fields.hasErrors('introduce')}? 'form-control fieldError' : 'form-control'">
             <p th:if="${#fields.hasErrors('introduce')}" th:errors="*{introduce}">Incorrect date</p>
         </div>
+        <div class="form-group" id="add_group">
+            <label th:for="links">링크</label> <button class="btn btn-outline-secondary btn-sm" type="button" id="button-addon2" onclick="add_link_box()">+</button>
+            <div class="input-group" th:id="linkNum+${i}" th:each="i: ${#numbers.sequence(0, #lists.size(memberForm.links))}">
+                <input type="text" th:field="*{links[__${iStat.index}__]}" class="form-control">
+                <button class="btn btn-outline-danger" type="button" th:onclick="|javascript:remove_link_box('${i}')|">X</button>
+            </div>
+<!--            <div class="input-group" th:id="linkNum+${lists.size(memberForm.links)-1}">-->
+<!--                <input type="text" th:field="*{links[__${#lists.size(memberForm.links)-1}__]}" class="form-control">-->
+<!--            </div>-->
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+
     <br/>
     <div th:replace="fragments/footer :: footer"/>
-</div> <!-- /container -->
+</div>
+<script th:inline="javascript" type="text/javascript">
+
+    /*<![CDATA[*/
+    var len = [[ ${#lists.size(memberForm.links)} ]];
+    /*]]*/
+
+    function add_link_box(){
+
+        // var temp = document.getElementById("add_group");
+        // var temp2 = document.getElementById("add_group2").cloneNode(true);
+        $("#add_group").append('<div class="input-group" id="linkNum' + len + '">' +
+            '<input type="text" id="links' + len + '"' + 'name="links[' + len + ']"' +
+            'class="form-control" placeholder="추가할 링크를 입력하세요!">' +
+            '<button class="btn btn-outline-danger" type="button" onclick="remove_link_box(' + len + ')">X</button>' +
+            '</div>');
+
+        len++;
+    }
+
+    function remove_link_box(i){
+        const to_remove = document.getElementById('linkNum'+i);
+        to_remove.remove();
+    }
+</script>
 </body>
 </html>

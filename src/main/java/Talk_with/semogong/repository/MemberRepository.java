@@ -36,5 +36,4 @@ public class MemberRepository {
         return em.createQuery("select m from Member as m where m.loginId = :login_id", Member.class)
                 .setParameter("login_id", login_id).getSingleResult();
     }
-
 }

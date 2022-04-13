@@ -1,5 +1,6 @@
 package Talk_with.semogong.service;
 
+import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.auth.MyUserDetail;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.StudyState;
@@ -67,4 +68,13 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findOne(id);
         member.edit(memberForm);
     }
+
+    public void editMemberImg(Long id, Image image) {
+        Member member = memberRepository.findOne(id);
+        member.setImage(image);
+    }
+
+//    public List<String> findLinks(Long memberId) {
+//        memberRepository.findLinks(memberId);
+//    }
 }

@@ -1,6 +1,7 @@
 package Talk_with.semogong.domain.form;
 
 import Talk_with.semogong.controller.HomeController;
+import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.Post;
 import Talk_with.semogong.domain.StudyState;
@@ -22,6 +23,7 @@ public class PostEditForm {
     private String html;
     private StudyState state;
     private List<String> times;
+    private Image image;
 
     // Member Info
     private String memberName;
@@ -42,6 +44,7 @@ public class PostEditForm {
         this.memberName = member.getName();
         this.memberNickname = member.getNickname();;
         this.memberDesiredJob = member.getDesiredJob();
+        this.image = post.getImage();
     }
 
 }

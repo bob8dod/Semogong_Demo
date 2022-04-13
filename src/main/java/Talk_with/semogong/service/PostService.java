@@ -1,5 +1,7 @@
 package Talk_with.semogong.service;
 
+import Talk_with.semogong.domain.Image;
+import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.Post;
 import Talk_with.semogong.domain.StudyState;
 import Talk_with.semogong.domain.form.PostEditForm;
@@ -60,5 +62,10 @@ public class PostService {
 
     public Long getRecentPostId(Long memberId) {
         return postRepository.findByMember(memberId).getId();
+    }
+
+    public void editPostImg(Long id, Image image) {
+        Post post = postRepository.findOne(id);
+        post.setImage(image);
     }
 }

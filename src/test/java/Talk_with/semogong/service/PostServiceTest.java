@@ -1,5 +1,6 @@
 package Talk_with.semogong.service;
 
+import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.Post;
 import Talk_with.semogong.domain.StudyState;
@@ -23,7 +24,7 @@ class PostServiceTest {
     @Test
     public void 게시글저장() throws Exception{
         //given (주어진 것들을 통해)
-        Member m1 = Member.createMember(new String("박승일"), "해돌해돌","백엔드 엔지니어", "aws/11234.img","안녕하세요, 17학번 썩은물입니다.", "bob8dod.tistory.com","github.com/bob8dod");
+        Member m1 = Member.createMember(new String("박승일"), "해돌해돌","백엔드 엔지니어", "aws/11234.img","안녕하세요, 17학번 썩은물입니다.", new Image("d","d"),"github.com/bob8dod");
         memberService.save(m1);
 
         String title = "세모공 데모 테스트";
@@ -44,7 +45,7 @@ class PostServiceTest {
     @Test
     public void 상태클릭() throws Exception{
         //given (주어진 것들을 통해)
-        Member m1 = Member.createMember(new String("이해성"), "해돌해돌","백엔드 엔지니어", "aws/11234.img","안녕하세요, 17학번 썩은물입니다.", "bob8dod.tistory.com","github.com/bob8dod");
+        Member m1 = Member.createMember(new String("이해성"), "해돌해돌","백엔드 엔지니어", "aws/11234.img","안녕하세요, 17학번 썩은물입니다.", new Image("d","d"),"github.com/bob8dod");
         memberService.save(m1);
 
         String title = "세모공 데모 테스트";

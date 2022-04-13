@@ -12,6 +12,12 @@ spring:
       hibernate:
         format_sql : true
 
+  servlet:
+    multipart:
+      location: C:\Users\bob8d\OneDrive\Desktop\Semgong\semogong\src\main\resources\static\images
+      maxFileSize: 10MB
+      maxRequestSize: 20MB
+
 
 logging:
   level:

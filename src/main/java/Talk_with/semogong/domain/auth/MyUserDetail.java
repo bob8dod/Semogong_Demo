@@ -1,5 +1,6 @@
 package Talk_with.semogong.domain.auth;
 
+import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.StudyState;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class MyUserDetail implements UserDetails {
     private String name;
     private String nickname;
     private String desiredJob;
-    private String image;
+    private Image image;
     private StudyState state;
 
 

@@ -3,6 +3,7 @@ package Talk_with.semogong.controller;
 
 import Talk_with.semogong.domain.StudyState;
 import Talk_with.semogong.domain.auth.MyUserDetail;
+import Talk_with.semogong.domain.form.PostForm;
 import Talk_with.semogong.service.MemberService;
 import Talk_with.semogong.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,10 @@ public class TotalController {
         // Case #1 (사용자의 현상태가 공부완료 -> 즉, 공부 시작)
         if (state == StudyState.END) {
             memberService.changeState(memberId, StudyState.STUDYING); // posting 후 state change 필요 (오류 처리해야 됨)
-            return "redirect:/posts/new";
+            PostForm postForm = new PostForm();
+            postForm.setTime(LocalDateTime.now());
+            Long postId = postService.post(memberId, new PostForm());
+            return "redirect:/posts/" + postId.toString() + "/edit";
         }
 
         Long postId = postService.getRecentPostId(memberId);

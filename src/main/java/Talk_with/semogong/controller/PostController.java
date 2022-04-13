@@ -1,5 +1,6 @@
 package Talk_with.semogong.controller;
 
+import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.Post;
 import Talk_with.semogong.domain.StudyState;
@@ -11,6 +12,7 @@ import Talk_with.semogong.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -18,12 +20,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,18 +75,14 @@ public class PostController {
     public String edit(@PathVariable("id") Long id, @Valid @ModelAttribute("postForm") PostEditForm postEditForm, BindingResult result) {
         if (result.hasErrors()) { log.info("found Null, required re-post"); return "redirect:/posts/"+id.toString()+"/edit"; }
         postEditForm.setHtml(markdownToHTML(postEditForm.getContent()));
-        System.out.println(postEditForm.toString());
         postService.edit(postEditForm);
         return "redirect:/";
     }
 
-//    @GetMapping("/posts/{id}")
-//    public String search(@PathVariable("id") Long id, Model model){
-//        Post post = postService.findOne(id);
-//        PostForm postForm = createPostForm(post);
-//        model.addAttribute("postForm", postForm);
-//        return "post/checkPost";
-//    }
+    @PostMapping( "/posts/edit/{id}/img")
+    public void postImgEdit(@PathVariable("id") Long id, @RequestParam("file")  MultipartFile[] files) throws IOException {
+        postService.editPostImg(id, createImage(files));
+    }
 
     private Member getLoginMemberId(Authentication authentication) {
         MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
@@ -109,6 +107,25 @@ public class PostController {
         postForm.setContent(post.getContent());
         postForm.setHtml(post.getHtml());
         return postForm;
+    }
+
+    private Image createImage(MultipartFile[] files) {
+//        String rootPath = "/images/";
+
+        Image image = null;
+        for (MultipartFile file : files) {
+            String pathName = RandomStringUtils.randomAlphanumeric(16) + file.getOriginalFilename();
+            File newFileName = new File(pathName);
+
+            try {
+                file.transferTo(newFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            image = new Image( file.getOriginalFilename(), pathName );
+        }
+        return image;
     }
 
 }

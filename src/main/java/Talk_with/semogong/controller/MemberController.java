@@ -1,22 +1,35 @@
 package Talk_with.semogong.controller;
 
+import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.auth.MyUserDetail;
 import Talk_with.semogong.domain.form.MemberForm;
 import Talk_with.semogong.service.MemberService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpSession;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -54,8 +67,18 @@ public class MemberController {
         return "member/createMemberForm";
     }
 
+
+
+    @PostMapping( "/members/edit/{id}/img")
+    public void memberImgEdit(@PathVariable("id") Long id, @RequestParam("file")  MultipartFile[] files) throws IOException {
+        memberService.editMemberImg(id, createImage(files));
+    }
+
+
     @PostMapping("/members/edit/{id}")
-    public String memberEdit(@PathVariable("id") Long id, MemberForm memberForm) {
+    public String memberEdit(@PathVariable("id") Long id, MemberForm memberForm){
+        List<String> links = memberForm.getLinks(); while (links.remove("")){ }
+        memberForm.setLinks(links);
         memberService.editMember(id, memberForm);
         return "redirect:/";
     }
@@ -82,6 +105,50 @@ public class MemberController {
         memberForm.setDesiredJob(member.getDesiredJob());
         memberForm.setIntroduce(member.getIntroduce());
         memberForm.setState(member.getState());
+        memberForm.setLinks(member.getLinks());
+        memberForm.setImage(member.getImage());
         return memberForm;
     }
+
+    private Image createImage(MultipartFile[] files) {
+//        String rootPath = "/images/";
+
+        Image image = null;
+        for (MultipartFile file : files) {
+            String pathName = RandomStringUtils.randomAlphanumeric(16) + file.getOriginalFilename();
+            File newFileName = new File(pathName);
+
+            try {
+                file.transferTo(newFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            image = new Image( file.getOriginalFilename(), pathName );
+        }
+        return image;
+    }
+
+    @Data
+    static class LinkList{
+        private List<LinkString> links;
+
+        public LinkList() {}
+        public LinkList(List<LinkString> links) {
+            this.links = links;
+        }
+    }
+
+    @Data
+    static class LinkString {
+        private String name;
+
+        public LinkString() { }
+
+        public LinkString(String name) {
+            this.name = name;
+        }
+    }
+
+
 }
