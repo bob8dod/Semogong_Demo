@@ -8,12 +8,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 
 @EnableWebSecurity		//spring security 를 적용한다는 Annotation
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final AuthenticationFailureHandler customFailureHandler;
     private final MemberService memberService;
     /**
      * 규칙 설정
@@ -28,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/member/login")
+                .failureHandler(customFailureHandler) // 로그인 실패 핸들러
                 .defaultSuccessUrl("/")
                 .permitAll()
                 .and()

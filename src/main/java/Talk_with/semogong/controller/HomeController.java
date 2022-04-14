@@ -9,21 +9,16 @@ import Talk_with.semogong.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.tomcat.util.descriptor.web.ResourceBase;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,7 +54,7 @@ public class HomeController {
         model.addAttribute("page", -1);
         model.addAttribute("posts", postDtos);
         model.addAttribute("commentForm", new CommentForm());
-        return "home_temp";
+        return "home";
     }
 
     @RequestMapping("/{page}")
@@ -82,7 +77,34 @@ public class HomeController {
         List<PostViewDto> postDtos = posts.stream().map(PostViewDto::new).collect(Collectors.toList());
         model.addAttribute("posts", postDtos);
         model.addAttribute("page", page);
-        return "home_temp";
+        model.addAttribute("commentForm", new CommentForm());
+        return "home";
+    }
+
+    @GetMapping("/auth/login")
+    public String login(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "exception", required = false) String exception, Model model, Authentication authentication) {
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
+        if (authentication != null) {
+            Member member = getLoginMember(authentication);
+            MemberForm memberForm = createMemberForm(member);
+
+            model.addAttribute("check", true);
+            model.addAttribute("member", memberForm);
+            if (member.getState() == StudyState.STUDYING || member.getState() == StudyState.BREAKING) {
+                PostViewDto memberRecentPostDto = new PostViewDto(postService.getRecentPost(member.getId()));
+                model.addAttribute("recentPost", memberRecentPostDto);
+            }
+        } else {
+            model.addAttribute("check", false);
+        }
+        List<Post> posts = postService.findByPage(0);
+        List<PostViewDto> postDtos = posts.stream().map(PostViewDto::new).collect(Collectors.toList());
+
+        model.addAttribute("page", -1);
+        model.addAttribute("posts", postDtos);
+        model.addAttribute("commentForm", new CommentForm());
+        return "home";
     }
 
 

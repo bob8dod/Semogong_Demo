@@ -50,8 +50,11 @@ public class MemberController {
 
     // 회원가입 진행
     @PostMapping("/members/signup")
-    public String signUp(@Valid MemberForm memberForm, BindingResult result) {
-        if (result.hasErrors()) { log.info("found Null, re-joining"); return "member/createMemberForm"; }
+    public String signUp(@Valid MemberForm memberForm, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            log.info("found Null, re-joining");
+            model.addAttribute("first", true);
+            return "member/createMemberForm"; }
         Member member = Member.createMember(memberForm.getLoginId(), memberForm.getPassword(), memberForm.getName(),memberForm.getNickname(),memberForm.getDesiredJob(), null,memberForm.getIntroduce(),null ,null);
         member.setRole("USER");
         memberService.save(member);

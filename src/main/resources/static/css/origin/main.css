@@ -21,3 +21,8 @@ irame{
     width:100%;
     background-color:white;
 }
+
+.make-center {
+    display: flex;
+    justify-content: center;
+}
