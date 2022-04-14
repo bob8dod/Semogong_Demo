@@ -46,35 +46,43 @@ public class HomeController {
 
             model.addAttribute("check", true);
             model.addAttribute("member", memberForm);
+            if (member.getState() == StudyState.STUDYING || member.getState() == StudyState.BREAKING) {
+                PostViewDto memberRecentPostDto = new PostViewDto(postService.getRecentPost(member.getId()));
+                model.addAttribute("recentPost", memberRecentPostDto);
+            }
         } else {
             model.addAttribute("check", false);
         }
         List<Post> posts = postService.findByPage(0);
         List<PostViewDto> postDtos = posts.stream().map(PostViewDto::new).collect(Collectors.toList());
+
         model.addAttribute("page", -1);
         model.addAttribute("posts", postDtos);
         model.addAttribute("commentForm", new CommentForm());
-        return "home";
+        return "home_temp";
     }
 
     @RequestMapping("/{page}")
-    public String home_page(@PathVariable("page") Integer page, Model model, Authentication authentication){
+    public String home_page(@PathVariable("page") Integer page, Model model, Authentication authentication) {
         log.info("opened home");
         if (authentication != null) {
             Member member = getLoginMember(authentication);
             MemberForm memberForm = createMemberForm(member);
 
-            model.addAttribute("check",true);
+            model.addAttribute("check", true);
             model.addAttribute("member", memberForm);
+            if (member.getState() == StudyState.STUDYING || member.getState() == StudyState.BREAKING) {
+                PostViewDto memberRecentPostDto = new PostViewDto(postService.getRecentPost(member.getId()));
+                model.addAttribute("recentPost", memberRecentPostDto);
+            }
+        } else {
+            model.addAttribute("check", false);
         }
-        else{
-            model.addAttribute("check",false);
-        }
-        List<Post> posts = postService.findByPage((page-1)*12);
+        List<Post> posts = postService.findByPage((page - 1) * 12);
         List<PostViewDto> postDtos = posts.stream().map(PostViewDto::new).collect(Collectors.toList());
-        model.addAttribute("posts",postDtos);
-        model.addAttribute("page",page);
-        return "home";
+        model.addAttribute("posts", postDtos);
+        model.addAttribute("page", page);
+        return "home_temp";
     }
 
 
@@ -82,11 +90,11 @@ public class HomeController {
     @GetMapping("/images")
     public Resource showImage(@RequestParam("filename") String filename) throws MalformedURLException {
         String rootPath = "C:\\Users\\bob8d\\OneDrive\\Desktop\\Semgong\\semogong\\src\\main\\resources\\static\\images\\";
-        return new UrlResource( "file:" + rootPath + filename);
+        return new UrlResource("file:" + rootPath + filename);
     }
 
     private Member getLoginMember(Authentication authentication) {
-        MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
+        MyUserDetail userDetail = (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
         String loginId = userDetail.getEmail();
         return memberService.findByLoginId(loginId); // "박승일"로 로그인 했다고 가정, 해당 로그인된 회원의 ID를 가져옴
     }
@@ -137,7 +145,8 @@ public class HomeController {
             this.comments = post.getComments().stream().map(CommentViewDto::new).collect(Collectors.toList());
             this.state = post.getState();
             this.memberName = post.getMember().getName();
-            this.memberNickname = post.getMember().getNickname();;
+            this.memberNickname = post.getMember().getNickname();
+            ;
             this.memberDesiredJob = post.getMember().getDesiredJob();
             this.postImg = post.getImage();
             this.memberImg = post.getMember().getImage();

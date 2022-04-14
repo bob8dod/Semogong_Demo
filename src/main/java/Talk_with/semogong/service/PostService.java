@@ -60,12 +60,16 @@ public class PostService {
         post.editState(state);
     }
 
-    public Long getRecentPostId(Long memberId) {
-        return postRepository.findByMember(memberId).getId();
+    public Post getRecentPost(Long memberId) {
+        return postRepository.findByMember(memberId);
     }
 
     public void editPostImg(Long id, Image image) {
         Post post = postRepository.findOne(id);
         post.setImage(image);
+    }
+
+    public void deletePost(Post post) {
+        postRepository.deleteOne(post);
     }
 }

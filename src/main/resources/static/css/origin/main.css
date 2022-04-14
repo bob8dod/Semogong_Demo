@@ -1,0 +1,23 @@
+.card_box{
+    border: solid lightgray 1px;
+    padding:0px 5px 0px 5px;
+}
+
+.col-lg-6:hover .card_box {
+    background-color: #f8f9fa;
+}
+
+irame{
+    overflow-x:hidden;
+}
+
+.content_title_img{
+    max-width: 320px;
+    max-height: 160px;
+}
+
+.content_title_img_box{
+    height:160px;
+    width:100%;
+    background-color:white;
+}

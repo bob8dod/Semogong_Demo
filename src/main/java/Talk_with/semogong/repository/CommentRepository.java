@@ -17,4 +17,8 @@ public class CommentRepository {
         em.persist(comment);
     }
 
+    public void deleteOne(Long id) {
+        Comment comment = em.find(Comment.class, id);
+        em.remove(comment);
+    }
 }

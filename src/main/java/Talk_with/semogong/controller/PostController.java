@@ -84,6 +84,20 @@ public class PostController {
         postService.editPostImg(id, createImage(files));
     }
 
+    @GetMapping("/posts/delete/{id}")
+    public String postDelete(@PathVariable("id") Long id, Authentication authentication) {
+        Member member = getLoginMemberId(authentication);
+        Post post = postService.findOne(id);
+        if (member.getId() != post.getMember().getId()) {
+            return "redirect:/"; // 오류 처리해줘야 됨.
+        }
+        if (post.getState() != StudyState.END) {
+            member.setState(StudyState.END);
+        }
+        postService.deletePost(post);
+        return "redirect:/";
+    }
+
     private Member getLoginMemberId(Authentication authentication) {
         MyUserDetail userDetail =  (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
         String loginId = userDetail.getEmail();

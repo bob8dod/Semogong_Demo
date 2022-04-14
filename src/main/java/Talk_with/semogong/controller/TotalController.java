@@ -39,7 +39,7 @@ public class TotalController {
             return "redirect:/posts/" + postId.toString() + "/edit";
         }
 
-        Long postId = postService.getRecentPostId(memberId);
+        Long postId = postService.getRecentPost(memberId).getId();
 
         // Case #2 (사용자의 현상태가 휴식 중 -> 즉, 공부 재시작)
         if (state == StudyState.BREAKING) {
@@ -62,7 +62,7 @@ public class TotalController {
 
         // Case #1 (사용자의 현상태가 공부 중 -> 즉, 휴식 시작)
         if (state == StudyState.STUDYING) {
-            Long postId = postService.getRecentPostId(memberId);
+            Long postId = postService.getRecentPost(memberId).getId();
             memberService.changeState(memberId, StudyState.BREAKING);
             postService.changeState(postId, StudyState.BREAKING);
             postService.addTime(memberId, LocalDateTime.now());
@@ -84,7 +84,7 @@ public class TotalController {
         if (state == StudyState.END) {
             return "redirect:/";
         }
-        Long postId = postService.getRecentPostId(memberId);
+        Long postId = postService.getRecentPost(memberId).getId();
 
         // Case #1 (사용자의 현상태가 공부 중 -> 즉, 공부 완료)
         if (state == StudyState.STUDYING) {

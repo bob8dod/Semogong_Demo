@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,12 @@ public class CommentController {
         Comment comment = Comment.makeComment(commentForm.getComment(), post, member, LocalDateTime.now());
         commentService.save(comment);
 
+        return "redirect:/";
+    }
+
+    @GetMapping("/comment/delete/{id}")
+    public String postDelete(@PathVariable("id") Long id) {
+        commentService.deleteComment(id);
         return "redirect:/";
     }
 }

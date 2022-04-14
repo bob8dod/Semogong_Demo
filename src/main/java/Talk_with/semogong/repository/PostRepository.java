@@ -37,4 +37,8 @@ public class PostRepository {
                 .setMaxResults(12)
                 .getResultList();
     }
+
+    public void deleteOne(Post post) {
+        em.remove(post);
+    }
 }

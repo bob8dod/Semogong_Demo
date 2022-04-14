@@ -83,4 +83,8 @@ public class Member {
     public void setImage(Image image) {
         this.image = image;
     }
+
+    public void setState(StudyState state) {
+        this.state = state;
+    }
 }

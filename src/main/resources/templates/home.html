@@ -120,11 +120,11 @@
                             <label for="password">Password</label>
                         </div>
 
-                        <div class="checkbox mb-3">
-                            <label>
-                                <input type="checkbox" value="remember-me"> Remember me
-                            </label>
-                        </div>
+<!--                        <div class="checkbox mb-3">-->
+<!--                            <label>-->
+<!--                                <input type="checkbox" value="remember-me"> Remember me-->
+<!--                            </label>-->
+<!--                        </div>-->
                         <button class="w-100 btn btn-lg btn-primary" type="submit">LOG IN</button>
 
                     </form>
@@ -134,25 +134,31 @@
             </div>
             <!-- Categories widget-->
             <div class="card mb-4">
-                <div class="card-header">Categories</div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                <li><a href="#!">Web Design</a></li>
-                                <li><a href="#!">HTML</a></li>
-                                <li><a href="#!">Freebies</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="list-unstyled mb-0">
-                                <li><a href="#!">JavaScript</a></li>
-                                <li><a href="#!">CSS</a></li>
-                                <li><a href="#!">Tutorials</a></li>
-                            </ul>
+                <div class="card-header">My Post</div>
+                <div class="card-body" th:if="${recentPost != null}">
+                    <!-- My Post-->
+                    <div class="card mb-4" style="margin: 0px!important;" data-bs-toggle="modal" th:attr="data-bs-target='#recentPost'">
+                        <img class="card-img-top" th:src="'/images?filename='+ ${recentPost.postImg?.imgSrc}" alt="..." width="490" height="217"/>
+                        <div class="card-body list-group-item list-group-item-action" data-bs-toggle="modal" th:attr="data-bs-target='#postModal'+${recentPost.id}">  <!-- th:href="@{/posts/{id} (id=*{post.id})}"-->
+                            <!--                            <div class="small text-muted" style="margin-bottom: 2px" th:text="${post.formatCreateTime}">January 1, 2021</div>-->
+                            <h2 class="card-title h5" th:text="${recentPost.title}">Post Title</h2>
+                            <div class="card-text make-align"><img th:src="'/images?filename='+ ${recentPost.memberImg?.imgSrc}" width="30px" height="20px" alt="profile"><div style="display:inline-block;" th:text="${recentPost.memberName}"></div></div>
+                            <div class="card-text"><p class="badge bg-secondary" style="margin: 3px" th:text="${recentPost.memberDesiredJob}"></p></div>
+                            <div class="card-text"><p class="badge" style="margin: 3px; background-color: #86b7fe;" th:text="${recentPost.state}">공부 중</p></div>
+                            <div class="card-text">
+                                <p class="badge" style="margin: 1px; background-color:#dfc2c4;" th:each="i: ${#numbers.sequence(1, #lists.size(recentPost.times)-1,2)}" >
+                                    <th:block th:text="|${recentPost.times[i -1]}| + ' ~ '+|${recentPost.times[i]}|"> 19:00 ~ 20:00</th:block>
+                                </p>
+                                <p th:if="${#lists.size(recentPost.times)%2!=0}" class="badge" style="margin: 1px; background-color: #dfc2c4;">
+                                    <th:block th:text="|${recentPost.times[#lists.size(recentPost.times)-1]}| + ' ~'"> 19:00 ~</th:block>
+                                </p>
+                            </div>
+                            <div class="card-text"><p class="small" style="margin: 3px" th:text="${recentPost.introduce}"></p></div>
+                            <!--                                    <a class="btn btn-primary" th:href="@{/posts/{id} (id=*{post.id})}">Read more →</a>-->
                         </div>
                     </div>
                 </div>
+                <div class="card-body" th:if="${recentPost == null}"> 현재 작성 중인 글이 없습니다</div>
             </div>
             <!-- Side widget-->
             <div class="card mb-4">
@@ -210,6 +216,60 @@
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
 <!--                                <button class="btn btn-primary me-md-2" type="button">Button</button>-->
                                 <a class="btn btn-secondary btn-sm" th:href="@{/posts/{id}/edit (id=*{post.id})}"type="button">Edit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Member Modals -->
+<div th:if="${recentPost != null}" class="portfolio-modal modal fade" th:id="recentPost" tabindex="-1" aria-labelledby="portfolioModal1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header border-0"><button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button></div>
+            <div class="modal-body pb-5"> <!-- text-center-->
+                <div class="container">
+                    <div class="row justify-content-center"> <!--justify-content-center-->
+                        <div class="col-lg-8">
+                            <!-- Post Modal - Image-->
+                            <div class="text-center"><img class="img-fluid rounded" th:src="'/images?filename='+ ${recentPost.postImg?.imgSrc}" alt="..." /></div>
+                            <!-- Post Modal - Title-->
+                            <h1 class="display-3" sytle="font-weight: bold;" th:text="${recentPost.title}"></h1>
+                            <!-- Portfolio Modal - Text-->
+                            <div class="card-text" th:text="'작성자 : ' + ${recentPost.memberName}"> Member's Name </div>
+                            <div class="card-text" th:text="'상태 : ' + ${recentPost.state}"> Member's State </div>
+                            <div class="card-text" th:text="'희망 직무 : ' + ${recentPost.memberDesiredJob}"> Member's Desired Job </div>
+                            <div class="card-text" th:text="'오늘의 한줄 : ' + ${recentPost.introduce}"> Post Introduce </div>
+                            <div class="card-text">
+                                <p style="display: inline-block"> 학습 시간 : </p>
+                                <p class="badge" style="margin: 1px; background-color:#dfc2c4;" th:each="i: ${#numbers.sequence(1, #lists.size(recentPost.times)-1,2)}" >
+                                    <th:block th:text="|${recentPost.times[i -1]}| + ' ~ '+|${recentPost.times[i]}|"> 19:00 ~ 20:00</th:block>
+                                </p>
+                                <p th:if="${#lists.size(recentPost.times)%2!=0}" class="badge" style="margin: 1px; background-color: #dfc2c4;">
+                                    <th:block th:text="|${recentPost.times[#lists.size(recentPost.times)-1]}| + ' ~'"> 19:00 ~</th:block>
+                                </p>
+                            </div>
+                            <hr/>
+                            <div>
+                                <div th:each="comment:${recentPost.comments}" >
+                                    <img th:src="'/images?filename='+ ${comment.memberImg?.imgSrc}" width="30px" height="20px">
+                                    <p th:text="${comment.memberName}">작성자</p>
+                                    <p th:text="${comment.content}">댓글 내용</p>
+                                </div>
+                                <form class="input-group mb-3" role="form" th:action="@{/posts/comment/{id} (id=${recentPost.id})}" th:object="${commentForm}" method="post">
+                                    <input type="text" th:field="*{comment}" class="form-control" placeholder="댓글을 작성해 보세요!">
+                                    <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                                </form>
+                            </div>
+                            <hr/>
+                            <p class="mb-4" th:utext="${recentPost.html}"> Content by HTML </p>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <!--                                <button class="btn btn-primary me-md-2" type="button">Button</button>-->
+                                <a class="btn btn-secondary btn-sm" th:href="@{/posts/{id}/edit (id=*{recentPost.id})}"type="button">Edit</a>
                             </div>
                         </div>
                     </div>
