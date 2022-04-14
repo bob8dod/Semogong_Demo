@@ -33,15 +33,15 @@
                         </th:block>
                     </div>
                 </div>
-                <label class="form-label" th:for="nickname">오늘의 한 줄</label>
-                <div class="input-group mb-3">
-                    <input type="text" th:field="*{introduce}" class="form-control"
-                           placeholder="오늘 하루를 정리하는 문장을 적어주세요!">
-                </div>
                 <label class="form-label" th:for="title">제목</label>
                 <div class="input-group mb-3">
                     <input type="text" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요" autocomplete="off" th:class="${#fields.hasErrors('title')}? 'form-control fieldError' : 'form-control'">
                     <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect date</p>
+                </div>
+                <label class="form-label" th:for="nickname">오늘의 한 줄</label>
+                <div class="input-group mb-3">
+                    <input type="text" th:field="*{introduce}" class="form-control"
+                           placeholder="오늘 하루를 정리하는 문장을 적어주세요!">
                 </div>
                 <label class="form-label" th:for="content">내용</label>
                 <div class="mb-3">

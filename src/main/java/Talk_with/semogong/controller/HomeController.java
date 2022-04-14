@@ -151,6 +151,7 @@ public class HomeController {
         private Image memberImg;
 
         // Member Info
+        private Long memberId;
         private String memberName;
         private String memberNickname;
         private String memberDesiredJob;
@@ -168,7 +169,7 @@ public class HomeController {
             this.state = post.getState();
             this.memberName = post.getMember().getName();
             this.memberNickname = post.getMember().getNickname();
-            ;
+            this.memberId = post.getMember().getId();
             this.memberDesiredJob = post.getMember().getDesiredJob();
             this.postImg = post.getImage();
             this.memberImg = post.getMember().getImage();
