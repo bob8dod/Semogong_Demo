@@ -89,7 +89,7 @@ public class HomeController {
     @ResponseBody
     @GetMapping("/images")
     public Resource showImage(@RequestParam("filename") String filename) throws MalformedURLException {
-        String rootPath = "C:\\Users\\bob8d\\OneDrive\\Desktop\\Semgong\\semogong\\src\\main\\resources\\static\\images\\";
+        String rootPath = "C:\\Users\\이재훈\\IdeaProjects\\Semogong_Demo\\src\\main\\resources\\static\\images\\";
         return new UrlResource("file:" + rootPath + filename);
     }
 

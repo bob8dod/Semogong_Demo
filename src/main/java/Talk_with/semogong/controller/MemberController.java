@@ -111,7 +111,6 @@ public class MemberController {
     }
 
     private Image createImage(MultipartFile[] files) {
-//        String rootPath = "/images/";
 
         Image image = null;
         for (MultipartFile file : files) {
