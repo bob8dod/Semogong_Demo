@@ -1,7 +1,6 @@
 package Talk_with.semogong.repository;
 
 import Talk_with.semogong.domain.Comment;
-import Talk_with.semogong.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

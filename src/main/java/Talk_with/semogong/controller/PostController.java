@@ -6,13 +6,11 @@ import Talk_with.semogong.domain.Post;
 import Talk_with.semogong.domain.StudyState;
 import Talk_with.semogong.domain.auth.MyUserDetail;
 import Talk_with.semogong.domain.form.PostEditForm;
-import Talk_with.semogong.domain.form.PostForm;
 import Talk_with.semogong.service.MemberService;
 import Talk_with.semogong.service.PostService;
-import lombok.Data;
+import Talk_with.semogong.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -24,12 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,27 +31,9 @@ public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final S3Service s3Service;
 
-    @GetMapping("/posts/new")
-    public String to_create(Model model){
-        log.info("posting");
-
-        PostForm postForm = new PostForm();
-        postForm.setTime(LocalDateTime.now());
-        model.addAttribute("postForm", postForm);
-        return "post/createPostForm";
-    }
-
-    @PostMapping("/posts/new")
-    public String create(@Valid PostForm postForm, BindingResult result, Authentication authentication) {
-        if (result.hasErrors()) { log.info("found Null, required re-post"); return "post/createPostForm"; }
-        Long memberId = getLoginMemberId(authentication).getId();
-        postForm.setHtml(markdownToHTML(postForm.getContent()));
-        postService.post(memberId,postForm);
-        return "redirect:/";
-    }
-
-    @GetMapping("/posts/{id}/edit")
+    @GetMapping("/posts/edit/{id}")
     public String to_edit(@PathVariable("id") Long id, Model model, Authentication authentication) {
         log.info("posting");
         Member member = getLoginMemberId(authentication);
@@ -71,7 +46,7 @@ public class PostController {
         return "post/editPostForm";
     }
 
-    @PostMapping("/posts/{id}/edit")
+    @PostMapping("/posts/edit/{id}")
     public String edit(@PathVariable("id") Long id, @Valid @ModelAttribute("postForm") PostEditForm postEditForm, BindingResult result) {
         if (result.hasErrors()) { log.info("found Null, required re-post"); return "redirect:/posts/"+id.toString()+"/edit"; }
         postEditForm.setHtml(markdownToHTML(postEditForm.getContent()));
@@ -79,9 +54,12 @@ public class PostController {
         return "redirect:/";
     }
 
-    @PostMapping( "/posts/edit/{id}/img")
-    public void postImgEdit(@PathVariable("id") Long id, @RequestParam("file")  MultipartFile[] files) throws IOException {
-        postService.editPostImg(id, createImage(files));
+
+    @PostMapping("/posts/edit/{id}/img")
+    public void postImgEdit(@PathVariable("id") Long id, @RequestParam("file") MultipartFile[] files) throws IOException {
+        MultipartFile file = files[0];
+        Image image = s3Service.upload(file);
+        postService.editPostImg(id, image);
     }
 
     @GetMapping("/posts/delete/{id}")
@@ -112,34 +90,4 @@ public class PostController {
 
         return renderer.render(document);
     }
-
-    private PostForm createPostForm(Post post) {
-        PostForm postForm = new PostForm();
-        postForm.setTime(post.getCreateTime());
-        postForm.setTitle(post.getTitle());
-        postForm.setIntroduce(post.getIntroduce());
-        postForm.setContent(post.getContent());
-        postForm.setHtml(post.getHtml());
-        return postForm;
-    }
-
-    private Image createImage(MultipartFile[] files) {
-//        String rootPath = "/images/";
-
-        Image image = null;
-        for (MultipartFile file : files) {
-            String pathName = RandomStringUtils.randomAlphanumeric(16) + file.getOriginalFilename();
-            File newFileName = new File(pathName);
-
-            try {
-                file.transferTo(newFileName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            image = new Image( file.getOriginalFilename(), pathName );
-        }
-        return image;
-    }
-
 }

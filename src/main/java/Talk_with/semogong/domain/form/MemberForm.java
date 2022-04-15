@@ -1,7 +1,6 @@
 package Talk_with.semogong.domain.form;
 
 import Talk_with.semogong.domain.Image;
-import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.StudyState;
 import lombok.Getter;
 import lombok.Setter;

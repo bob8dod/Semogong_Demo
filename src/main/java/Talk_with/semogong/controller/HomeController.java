@@ -9,14 +9,11 @@ import Talk_with.semogong.service.PostService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,13 +105,6 @@ public class HomeController {
     }
 
 
-    @ResponseBody
-    @GetMapping("/images")
-    public Resource showImage(@RequestParam("filename") String filename) throws MalformedURLException {
-        String rootPath = "C:\\Users\\bob8d\\OneDrive\\Desktop\\Semgong\\semogong\\src\\main\\resources\\static\\images\\";
-        return new UrlResource("file:" + rootPath + filename);
-    }
-
     private Member getLoginMember(Authentication authentication) {
         MyUserDetail userDetail = (MyUserDetail) authentication.getPrincipal();  //userDetail 객체를 가져옴 (로그인 되어 있는 놈)
         String loginId = userDetail.getEmail();
@@ -187,6 +177,7 @@ public class HomeController {
         private Image memberImg;
 
         // Member Info
+        private Long memberId;
         private String memberName;
 
         public CommentViewDto(Comment comment) {
@@ -195,6 +186,7 @@ public class HomeController {
             this.createTime = comment.getCreateTime();
             this.memberName = comment.getMember().getName();
             this.memberImg = comment.getMember().getImage();
+            this.memberId = comment.getMember().getId();
         }
     }
 

@@ -1,16 +1,12 @@
 package Talk_with.semogong.domain.form;
 
-import Talk_with.semogong.controller.HomeController;
 import Talk_with.semogong.domain.Image;
 import Talk_with.semogong.domain.Member;
 import Talk_with.semogong.domain.Post;
 import Talk_with.semogong.domain.StudyState;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class PostEditForm {
